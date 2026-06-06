@@ -40,12 +40,13 @@ npm test -- --watch=false
 - Login/cadastro em modo mock enquanto Supabase nao esta configurado.
 - Dashboard inicial com dados mockados.
 - Supabase SDK instalado.
+- URL do projeto Supabase configurada.
+- Migration inicial de banco/RLS criada.
 - Edge Function placeholder criada.
 
 ## Proximos Passos
 
-- Criar projeto no Supabase.
-- Configurar Auth e RLS.
-- Criar schema inicial.
+- Copiar a `anon public key` do Supabase para os environments.
+- Aplicar a migration inicial no SQL Editor do Supabase.
+- Configurar Auth.
 - Conectar Gemini via Edge Function.
-- Criar repositorio remoto no GitHub.

@@ -23,6 +23,12 @@ No painel do projeto:
 3. Copie `Project URL`.
 4. Copie `anon public key`.
 
+Projeto atual:
+
+```txt
+Project URL: https://antmqmgkvirbiopxkytx.supabase.co
+```
+
 Depois atualize:
 
 ```ts
@@ -30,7 +36,7 @@ Depois atualize:
 export const environment = {
   production: false,
   supabase: {
-    url: 'SUA_PROJECT_URL',
+    url: 'https://antmqmgkvirbiopxkytx.supabase.co',
     anonKey: 'SUA_ANON_PUBLIC_KEY',
   },
 };
@@ -39,6 +45,8 @@ export const environment = {
 Repita em `src/environments/environment.prod.ts` quando formos publicar.
 
 Importante: a anon key pode ficar no frontend quando as regras RLS estiverem corretas. Chaves secretas nunca devem ir para o Angular.
+
+Nunca use a `service_role key` no frontend, no GitHub ou em mensagens de chat.
 
 ### 3. Auth
 
@@ -49,7 +57,33 @@ No Supabase:
 3. Configure a URL local: `http://localhost:4200`.
 4. Depois adicionaremos a URL do Cloudflare Pages.
 
-### 4. Banco
+### 4. Aplicar o schema inicial
+
+Opcao mais simples pelo painel:
+
+1. Abra o projeto `resume-pilot` no Supabase.
+2. Va em `SQL Editor`.
+3. Clique em `New query`.
+4. Copie o conteudo de `supabase/migrations/20260606010000_initial_resume_pilot_schema.sql`.
+5. Cole no editor.
+6. Clique em `Run`.
+
+Depois disso, o Supabase deve criar as tabelas:
+
+- `professional_profiles`
+- `experiences`
+- `education`
+- `skills`
+- `jobs`
+- `applications`
+- `cv_versions`
+- `linkedin_audits`
+- `ai_analysis_runs`
+- `documents`
+
+Todas ja ficam com RLS ligado, permitindo que cada usuario acesse apenas os proprios dados.
+
+### 5. Banco
 
 As primeiras tabelas previstas:
 
@@ -58,7 +92,6 @@ As primeiras tabelas previstas:
 - `education`
 - `skills`
 - `jobs`
-- `job_requirements`
 - `applications`
 - `cv_versions`
 - `linkedin_audits`
