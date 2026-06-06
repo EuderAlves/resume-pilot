@@ -1,0 +1,4 @@
+project_id = "resume-pilot"
+
+[functions.analyze-career-fit]
+verify_jwt = true

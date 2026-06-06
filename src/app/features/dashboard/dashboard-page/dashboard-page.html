@@ -1,0 +1,84 @@
+<main class="app-shell">
+  <aside class="sidebar" aria-label="Navegacao da aplicacao">
+    <a class="brand" routerLink="/">
+      <span class="brand-mark">rP</span>
+      <span>resumePilot</span>
+    </a>
+
+    <nav>
+      <a class="active" href="#">
+        <svg lucideLayoutDashboard aria-hidden="true"></svg>
+        Dashboard
+      </a>
+      <a href="#">
+        <svg lucideTarget aria-hidden="true"></svg>
+        Vagas
+      </a>
+      <a href="#">
+        <svg lucideFileText aria-hidden="true"></svg>
+        CVs
+      </a>
+      <a href="#">
+        <svg lucideSparkles aria-hidden="true"></svg>
+        LinkedIn
+      </a>
+      <a href="#">
+        <svg lucideGlobe aria-hidden="true"></svg>
+        Mercado
+      </a>
+    </nav>
+  </aside>
+
+  <section class="workspace">
+    <header class="workspace-header">
+      <div>
+        <p class="eyebrow">MVP inicial</p>
+        <h1>Visao de carreira internacional</h1>
+      </div>
+      <div class="user-chip">
+        <span>{{ user()?.name || 'Usuario MVP' }}</span>
+      </div>
+    </header>
+
+    <section class="metric-grid" aria-label="Metricas principais">
+      @for (metric of dashboardMetrics; track metric.label) {
+        <article class="metric-card">
+          <span>{{ metric.label }}</span>
+          <strong>{{ metric.value }}</strong>
+          <p>{{ metric.detail }}</p>
+        </article>
+      }
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel">
+        <div class="panel-title">
+          <svg lucideBriefcaseBusiness aria-hidden="true"></svg>
+          <h2>Pipeline de candidaturas</h2>
+        </div>
+
+        <div class="pipeline">
+          @for (column of pipelineColumns; track column.label) {
+            <div class="pipeline-column" [class]="column.tone">
+              <span>{{ column.label }}</span>
+              <strong>{{ column.count }}</strong>
+            </div>
+          }
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-title">
+          <svg lucideChartColumnIncreasing aria-hidden="true"></svg>
+          <h2>Proximas acoes</h2>
+        </div>
+
+        <ul class="action-list">
+          @for (action of nextActions; track action) {
+            <li>{{ action }}</li>
+          }
+        </ul>
+      </article>
+    </section>
+  </section>
+</main>

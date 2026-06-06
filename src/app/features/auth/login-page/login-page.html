@@ -1,0 +1,75 @@
+<main class="auth-page">
+  <a class="brand" routerLink="/">
+    <span class="brand-mark">rP</span>
+    <span>resumePilot</span>
+  </a>
+
+  <section class="auth-layout" aria-labelledby="login-title">
+    <div class="auth-copy">
+      <p class="eyebrow">Acesso ao MVP</p>
+      <h1 id="login-title">Entre para testar o copiloto de carreira internacional.</h1>
+      <p>
+        Nesta primeira versao, o login funciona em modo simulado ate conectarmos o Supabase.
+        Depois disso, o mesmo fluxo passa a autenticar usuarios reais.
+      </p>
+
+      <div class="security-note">
+        <svg lucideShieldCheck aria-hidden="true"></svg>
+        <span>Chaves de IA e dados sensiveis ficarao protegidos no backend/Edge Functions.</span>
+      </div>
+    </div>
+
+    <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mode-switch" aria-label="Modo de acesso">
+        <button type="button" [class.active]="mode() === 'login'" (click)="setMode('login')">
+          Login
+        </button>
+        <button type="button" [class.active]="mode() === 'signup'" (click)="setMode('signup')">
+          Cadastro
+        </button>
+      </div>
+
+      <label>
+        <span>E-mail</span>
+        <div class="field">
+          <svg lucideMail aria-hidden="true"></svg>
+          <input type="email" formControlName="email" autocomplete="email" placeholder="voce@email.com" />
+        </div>
+      </label>
+
+      <label>
+        <span>Senha</span>
+        <div class="field">
+          <svg lucideLock aria-hidden="true"></svg>
+          <input
+            type="password"
+            formControlName="password"
+            autocomplete="current-password"
+            placeholder="Minimo de 6 caracteres"
+          />
+        </div>
+      </label>
+
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <p class="form-alert">Informe um e-mail valido.</p>
+      }
+
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <p class="form-alert">A senha precisa ter pelo menos 6 caracteres.</p>
+      }
+
+      @if (feedback()) {
+        <p class="form-alert">{{ feedback() }}</p>
+      }
+
+      @if (!isSupabaseConfigured()) {
+        <p class="mock-note">Modo MVP local: Supabase ainda nao configurado.</p>
+      }
+
+      <button class="submit-button" type="submit" [disabled]="isLoading()">
+        {{ isLoading() ? 'Entrando...' : actionLabel() }}
+        <svg lucideArrowRight aria-hidden="true"></svg>
+      </button>
+    </form>
+  </section>
+</main>
