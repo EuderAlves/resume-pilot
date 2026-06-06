@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   LucideBriefcaseBusiness,
   LucideChartColumnIncreasing,
   LucideFileText,
   LucideGlobe,
   LucideLayoutDashboard,
+  LucideLogOut,
   LucideSparkles,
   LucideTarget,
 } from '@lucide/angular';
@@ -22,6 +23,7 @@ import { dashboardMetrics, nextActions, pipelineColumns } from '../../../core/da
     LucideFileText,
     LucideGlobe,
     LucideLayoutDashboard,
+    LucideLogOut,
     LucideSparkles,
     LucideTarget,
   ],
@@ -30,9 +32,15 @@ import { dashboardMetrics, nextActions, pipelineColumns } from '../../../core/da
 })
 export class DashboardPage {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   protected readonly user = this.authService.currentUser;
   protected readonly dashboardMetrics = dashboardMetrics;
   protected readonly pipelineColumns = pipelineColumns;
   protected readonly nextActions = nextActions;
+
+  protected async signOut(): Promise<void> {
+    await this.authService.signOut();
+    await this.router.navigateByUrl('/login');
+  }
 }

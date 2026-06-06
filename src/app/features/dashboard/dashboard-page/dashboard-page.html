@@ -35,8 +35,14 @@
         <p class="eyebrow">MVP inicial</p>
         <h1>Visao de carreira internacional</h1>
       </div>
-      <div class="user-chip">
-        <span>{{ user()?.name || 'Usuario MVP' }}</span>
+      <div class="user-actions">
+        <div class="user-chip">
+          <span>{{ user()?.name || 'Usuario MVP' }}</span>
+        </div>
+        <button class="logout-button" type="button" (click)="signOut()">
+          <svg lucideLogOut aria-hidden="true"></svg>
+          <span>Sair</span>
+        </button>
       </div>
     </header>
 

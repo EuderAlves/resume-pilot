@@ -48,6 +48,10 @@ O produto deve responder tres perguntas principais:
 - Projeto Supabase criado: `resume-pilot`.
 - Migration inicial criada com tabelas e RLS.
 - Schema inicial aplicado no Supabase via SQL Editor.
+- Cadastro real testado pela tela `/login`.
+- Guards de rota criados para proteger a area logada.
+- Sessao do Supabase restaurada ao atualizar a pagina.
+- Logout criado no dashboard.
 - Dashboard inicial criado com dados mockados.
 - Edge Function placeholder criada para analise de carreira/vaga.
 - Asset visual da homepage criado e salvo em `public/images`.
@@ -58,9 +62,6 @@ O produto deve responder tres perguntas principais:
 ### Falta Fazer
 
 - Confirmar configuracao final do Supabase Auth para e-mail/senha.
-- Testar cadastro real pela tela `/login`.
-- Criar guardas de rota para proteger area logada.
-- Persistir sessao do usuario no refresh da pagina.
 - Criar tela de onboarding do perfil profissional.
 - Criar CRUD de experiencias, educacao, idiomas e skills.
 - Criar cadastro/importacao de vagas.
@@ -74,9 +75,9 @@ O produto deve responder tres perguntas principais:
 
 ## Estado Atual
 
-O MVP tem uma homepage comercial, fluxo de login/cadastro, dashboard inicial e base de Supabase preparada.
+O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial e base de banco preparada.
 
-O login passa a usar Supabase quando `url` e `anonKey` estao preenchidos nos environments. Caso a configuracao esteja vazia, o `AuthService` entra em modo mock para desenvolvimento local.
+O login usa Supabase quando `url` e `anonKey` estao preenchidos nos environments. Caso a configuracao esteja vazia, o `AuthService` entra em modo mock para desenvolvimento local.
 
 ## Arquitetura
 
@@ -118,6 +119,7 @@ Angular App
 | `src/app/app.routes.ts` | Define as rotas principais: homepage, login e app logado. |
 | `src/app/app.config.ts` | Configuracao global da aplicacao Angular. |
 | `src/app/core/auth/auth.service.ts` | Login, cadastro, usuario atual e fallback mock. |
+| `src/app/core/auth/auth.guard.ts` | Protege rotas privadas e redireciona usuarios autenticados. |
 | `src/app/core/auth/auth.service.spec.ts` | Testes unitarios do servico de autenticacao. |
 | `src/app/core/supabase/supabase.service.ts` | Cria e centraliza o client Supabase. |
 | `src/app/core/data/product-content.ts` | Conteudo mockado da homepage e dashboard. |
@@ -138,8 +140,8 @@ Angular App
 
 ```txt
 /       -> LandingPage
-/login  -> LoginPage
-/app    -> DashboardPage
+/login  -> LoginPage com guestGuard
+/app    -> DashboardPage com authGuard
 ```
 
 Arquivo responsavel:
@@ -157,6 +159,23 @@ LoginPage
       -> Supabase Auth
 ```
 
+Ao abrir ou atualizar a aplicacao:
+
+```txt
+AuthService
+  -> Supabase Auth getSession()
+    -> restaura usuario atual
+```
+
+Ao sair:
+
+```txt
+DashboardPage
+  -> AuthService.signOut()
+    -> Supabase Auth signOut()
+      -> redireciona para /login
+```
+
 Se o Supabase nao estiver configurado:
 
 ```txt
@@ -170,6 +189,7 @@ Arquivos responsaveis:
 ```txt
 src/app/features/auth/login-page
 src/app/core/auth/auth.service.ts
+src/app/core/auth/auth.guard.ts
 src/app/core/supabase/supabase.service.ts
 ```
 

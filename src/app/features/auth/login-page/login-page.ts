@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LucideArrowRight, LucideLock, LucideMail, LucideShieldCheck } from '@lucide/angular';
 
 import { AuthService } from '../../../core/auth/auth.service';
@@ -21,6 +21,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 export class LoginPage {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   protected readonly mode = signal<'login' | 'signup'>('login');
@@ -63,6 +64,16 @@ export class LoginPage {
       return;
     }
 
-    await this.router.navigateByUrl('/app');
+    await this.router.navigateByUrl(this.getRedirectUrl());
+  }
+
+  private getRedirectUrl(): string {
+    const redirectTo = this.route.snapshot.queryParamMap.get('redirectTo');
+
+    if (!redirectTo?.startsWith('/')) {
+      return '/app';
+    }
+
+    return redirectTo;
   }
 }

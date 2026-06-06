@@ -32,11 +32,14 @@ Validar uma experiencia simples, clara e vendavel com:
 
 ### Fase 1 - Base Vendavel
 
-- Homepage comercial.
-- Fluxo de login/cadastro.
-- Estrutura visual do app logado.
-- Dashboard inicial com cards e dados mockados.
-- Documentacao de setup.
+- Homepage comercial. `feito`
+- Fluxo de login/cadastro. `feito`
+- Cadastro real com Supabase Auth. `feito`
+- Guards de rota e restauracao de sessao. `feito`
+- Logout no dashboard. `feito`
+- Estrutura visual do app logado. `feito`
+- Dashboard inicial com cards e dados mockados. `feito`
+- Documentacao de setup. `feito`
 
 ### Fase 2 - Perfil Profissional
 
@@ -114,9 +117,8 @@ Validar uma experiencia simples, clara e vendavel com:
 ## Decisoes Pendentes
 
 - Escolher o modelo Gemini inicial.
-- Criar projeto Supabase e definir URL/chave anon.
+- Definir politica de confirmacao de e-mail no Supabase Auth.
 - Definir schema final do banco.
-- Criar repositorio remoto no GitHub.
 - Configurar Cloudflare Pages.
 - Definir estrategia de monetizacao e limite de uso por plano.
 
@@ -126,4 +128,5 @@ Validar uma experiencia simples, clara e vendavel com:
 - URL do projeto: `https://antmqmgkvirbiopxkytx.supabase.co`.
 - Anon public key configurada nos environments.
 - Migration inicial preparada em `supabase/migrations/20260606010000_initial_resume_pilot_schema.sql`.
-- Pendente: aplicar a migration no SQL Editor ou via Supabase CLI.
+- Migration inicial aplicada no SQL Editor.
+- Cadastro real validado na aplicacao.
