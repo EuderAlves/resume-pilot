@@ -1,0 +1,162 @@
+<main class="profile-page">
+  <header class="topbar">
+    <a class="back-link" routerLink="/app">
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Dashboard
+    </a>
+
+    <div class="user-chip">
+      <svg lucideUserRound aria-hidden="true"></svg>
+      <span>{{ user()?.name || 'Usuario MVP' }}</span>
+    </div>
+  </header>
+
+  <section class="page-heading">
+    <p class="eyebrow">Perfil profissional base</p>
+    <h1>Mapeie sua historia antes de ajustar CVs e LinkedIn.</h1>
+    <p>
+      Esses dados viram a fonte principal para o resumePilot comparar vagas, sugerir melhorias e
+      montar versoes de CV sem inventar experiencia.
+    </p>
+  </section>
+
+  @if (isLoading()) {
+    <section class="status-panel" aria-live="polite">Carregando perfil...</section>
+  } @else {
+    <form class="profile-form" [formGroup]="form" (ngSubmit)="saveAndGoToDashboard()">
+      <section class="form-section">
+        <div class="section-title">
+          <svg lucideUserRound aria-hidden="true"></svg>
+          <div>
+            <h2>Identidade profissional</h2>
+            <p>Defina como seu perfil deve aparecer para recrutadores e vagas-alvo.</p>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <label>
+            <span>Nome completo</span>
+            <input type="text" formControlName="fullName" placeholder="Seu nome" />
+          </label>
+
+          <label>
+            <span>Cargo-alvo</span>
+            <input type="text" formControlName="targetRole" placeholder="Frontend Developer" />
+          </label>
+
+          <label>
+            <span>Headline</span>
+            <input
+              type="text"
+              formControlName="headline"
+              placeholder="Frontend Angular Developer | TypeScript | APIs"
+            />
+          </label>
+
+          <label>
+            <span>Senioridade alvo</span>
+            <select formControlName="targetSeniority">
+              <option value="">Selecione</option>
+              <option value="junior">Junior</option>
+              <option value="mid-level">Pleno</option>
+              <option value="senior">Senior</option>
+              <option value="lead">Lead</option>
+              <option value="specialist">Especialista</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-title">
+          <svg lucideGlobe aria-hidden="true"></svg>
+          <div>
+            <h2>Objetivo internacional</h2>
+            <p>Conecte carreira, paises e contexto de mudanca.</p>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <label>
+            <span>Paises-alvo</span>
+            <input
+              type="text"
+              formControlName="targetCountriesInput"
+              placeholder="Portugal, Espanha, Alemanha"
+            />
+          </label>
+
+          <label>
+            <span>Local atual</span>
+            <input type="text" formControlName="location" placeholder="Brasil, Sao Paulo" />
+          </label>
+
+          <label class="span-2">
+            <span>Objetivo de mudanca</span>
+            <textarea
+              formControlName="relocationGoal"
+              rows="3"
+              placeholder="Conseguir uma vaga internacional com possibilidade de relocation ou trabalho remoto para Europa."
+            ></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-title">
+          <svg lucideLanguages aria-hidden="true"></svg>
+          <div>
+            <h2>Idiomas e resumo</h2>
+            <p>Use linhas separadas para idiomas. Exemplo: Ingles - intermediario.</p>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <label>
+            <span>Idiomas</span>
+            <textarea
+              formControlName="languagesInput"
+              rows="5"
+              placeholder="Portugues - nativo&#10;Ingles - intermediario&#10;Espanhol - avancado"
+            ></textarea>
+          </label>
+
+          <label>
+            <span>Resumo profissional base</span>
+            <textarea
+              formControlName="summary"
+              rows="5"
+              placeholder="Resumo objetivo com experiencia, stack, tipo de vaga desejada e contexto internacional."
+            ></textarea>
+          </label>
+        </div>
+      </section>
+
+      @if (form.invalid && form.touched) {
+        <p class="form-alert">Preencha os campos obrigatorios antes de salvar.</p>
+      }
+
+      @if (error()) {
+        <p class="form-alert">{{ error() }}</p>
+      }
+
+      @if (feedback()) {
+        <p class="form-success">
+          <svg lucideCheck aria-hidden="true"></svg>
+          {{ feedback() }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <button class="secondary-button" type="button" (click)="saveProfile()" [disabled]="isSaving()">
+          <svg lucideSave aria-hidden="true"></svg>
+          {{ isSaving() ? 'Salvando...' : 'Salvar perfil' }}
+        </button>
+
+        <button class="primary-button" type="submit" [disabled]="isSaving()">
+          {{ isSaving() ? 'Salvando...' : 'Salvar e voltar ao dashboard' }}
+        </button>
+      </div>
+    </form>
+  }
+</main>

@@ -66,6 +66,10 @@ nav a:hover {
   color: #ffffff;
 }
 
+nav a[aria-disabled='true'] {
+  opacity: 0.62;
+}
+
 svg {
   width: 19px;
   height: 19px;
@@ -253,6 +257,12 @@ h1 {
   background: #f5f8f6;
   color: #384c48;
   line-height: 1.5;
+}
+
+.action-list a {
+  color: #0b6b62;
+  font-weight: 800;
+  text-decoration: none;
 }
 
 @media (max-width: 980px) {

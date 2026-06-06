@@ -9,6 +9,7 @@ import {
   LucideLogOut,
   LucideSparkles,
   LucideTarget,
+  LucideUserRoundPen,
 } from '@lucide/angular';
 
 import { AuthService } from '../../../core/auth/auth.service';
@@ -26,6 +27,7 @@ import { dashboardMetrics, nextActions, pipelineColumns } from '../../../core/da
     LucideLogOut,
     LucideSparkles,
     LucideTarget,
+    LucideUserRoundPen,
   ],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss',

@@ -43,7 +43,8 @@ Validar uma experiencia simples, clara e vendavel com:
 
 ### Fase 2 - Perfil Profissional
 
-- Cadastro do perfil macro.
+- Cadastro do perfil macro. `feito`
+- Persistencia do perfil em `professional_profiles`. `feito`
 - Experiencias profissionais estruturadas.
 - Educacao, idiomas, skills e paises-alvo.
 - Banco de evidencias profissionais reutilizaveis.

@@ -53,6 +53,9 @@ O produto deve responder tres perguntas principais:
 - Sessao do Supabase restaurada ao atualizar a pagina.
 - Logout criado no dashboard.
 - Dashboard inicial criado com dados mockados.
+- Tela de onboarding do perfil profissional criada.
+- Perfil profissional salvo na tabela `professional_profiles`.
+- Serviço de perfil criado com mappers testados.
 - Edge Function placeholder criada para analise de carreira/vaga.
 - Asset visual da homepage criado e salvo em `public/images`.
 - Testes unitarios iniciais criados.
@@ -62,8 +65,7 @@ O produto deve responder tres perguntas principais:
 ### Falta Fazer
 
 - Confirmar configuracao final do Supabase Auth para e-mail/senha.
-- Criar tela de onboarding do perfil profissional.
-- Criar CRUD de experiencias, educacao, idiomas e skills.
+- Criar CRUD de experiencias, educacao e skills.
 - Criar cadastro/importacao de vagas.
 - Criar score de aderencia perfil x vaga.
 - Criar gerador de versoes de CV por vaga.
@@ -75,7 +77,7 @@ O produto deve responder tres perguntas principais:
 
 ## Estado Atual
 
-O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial e base de banco preparada.
+O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial, onboarding do perfil profissional e base de banco preparada.
 
 O login usa Supabase quando `url` e `anonKey` estao preenchidos nos environments. Caso a configuracao esteja vazia, o `AuthService` entra em modo mock para desenvolvimento local.
 
@@ -90,6 +92,7 @@ Angular App
       -> Marketing
       -> Auth
       -> Dashboard
+      -> Profile
   -> Core
     -> Auth Service
     -> Supabase Service
@@ -126,6 +129,8 @@ Angular App
 | `src/app/features/marketing/landing-page` | Homepage comercial do produto. |
 | `src/app/features/auth/login-page` | Tela de login/cadastro. |
 | `src/app/features/dashboard/dashboard-page` | Dashboard inicial do usuario logado. |
+| `src/app/features/profile/profile-onboarding-page` | Tela de onboarding/edicao do perfil profissional base. |
+| `src/app/features/profile/data` | Modelos, mappers e servico de persistencia do perfil profissional. |
 | `src/environments/environment.ts` | Configuracao local/desenvolvimento. |
 | `src/environments/environment.prod.ts` | Configuracao de producao. |
 | `public/images/career-copilot-hero.png` | Imagem principal da homepage/login. |
@@ -142,6 +147,7 @@ Angular App
 /       -> LandingPage
 /login  -> LoginPage com guestGuard
 /app    -> DashboardPage com authGuard
+/app/profile -> ProfileOnboardingPage com authGuard
 ```
 
 Arquivo responsavel:
@@ -208,6 +214,25 @@ Arquivos responsaveis:
 ```txt
 src/app/features/dashboard/dashboard-page
 src/app/core/data/product-content.ts
+```
+
+### Perfil Profissional
+
+```txt
+ProfileOnboardingPage
+  -> profile-form.mapper.ts
+    -> converte campos do formulario
+  -> ProfessionalProfileService
+    -> SupabaseService
+      -> professional_profiles
+```
+
+Arquivos responsaveis:
+
+```txt
+src/app/features/profile/profile-onboarding-page
+src/app/features/profile/data/professional-profile.service.ts
+src/app/features/profile/data/profile-form.mapper.ts
 ```
 
 ### Analise com IA

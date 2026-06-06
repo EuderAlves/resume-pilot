@@ -6,23 +6,27 @@
     </a>
 
     <nav>
-      <a class="active" href="#">
+      <a class="active" routerLink="/app">
         <svg lucideLayoutDashboard aria-hidden="true"></svg>
         Dashboard
       </a>
-      <a href="#">
+      <a routerLink="/app/profile">
+        <svg lucideUserRoundPen aria-hidden="true"></svg>
+        Perfil
+      </a>
+      <a href="#" aria-disabled="true">
         <svg lucideTarget aria-hidden="true"></svg>
         Vagas
       </a>
-      <a href="#">
+      <a href="#" aria-disabled="true">
         <svg lucideFileText aria-hidden="true"></svg>
         CVs
       </a>
-      <a href="#">
+      <a href="#" aria-disabled="true">
         <svg lucideSparkles aria-hidden="true"></svg>
         LinkedIn
       </a>
-      <a href="#">
+      <a href="#" aria-disabled="true">
         <svg lucideGlobe aria-hidden="true"></svg>
         Mercado
       </a>
@@ -81,7 +85,13 @@
 
         <ul class="action-list">
           @for (action of nextActions; track action) {
-            <li>{{ action }}</li>
+            <li>
+              @if (action.route) {
+                <a [routerLink]="action.route">{{ action.label }}</a>
+              } @else {
+                <span>{{ action.label }}</span>
+              }
+            </li>
           }
         </ul>
       </article>

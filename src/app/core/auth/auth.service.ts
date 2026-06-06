@@ -9,6 +9,7 @@ export interface AuthCredentials {
 }
 
 export interface SessionUser {
+  readonly id: string;
   readonly email: string;
   readonly name: string;
 }
@@ -44,6 +45,7 @@ export class AuthService {
   async signInWithPassword(credentials: AuthCredentials): Promise<AuthResult> {
     if (!this.supabase.isConfigured()) {
       this.user.set({
+        id: 'mock-user',
         email: credentials.email,
         name: credentials.email.split('@')[0] || 'Usuario MVP',
       });
@@ -77,6 +79,7 @@ export class AuthService {
   async signUpWithPassword(credentials: AuthCredentials): Promise<AuthResult> {
     if (!this.supabase.isConfigured()) {
       this.user.set({
+        id: 'mock-user',
         email: credentials.email,
         name: credentials.email.split('@')[0] || 'Usuario MVP',
       });
@@ -171,6 +174,7 @@ export class AuthService {
     }
 
     return {
+      id: user.id,
       email: user.email,
       name: user.user_metadata?.['name'] ?? user.email.split('@')[0] ?? 'Usuario MVP',
     };

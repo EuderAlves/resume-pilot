@@ -40,6 +40,11 @@ export interface PipelineColumn {
   readonly tone: 'neutral' | 'warning' | 'success' | 'danger';
 }
 
+export interface NextAction {
+  readonly label: string;
+  readonly route?: string;
+}
+
 export const landingMetrics: readonly LandingMetric[] = [
   { value: '1', label: 'perfil profissional centralizado' },
   { value: '3', label: 'idiomas pensados desde o inicio' },
@@ -131,10 +136,17 @@ export const pipelineColumns: readonly PipelineColumn[] = [
   { label: 'Negado', count: 3, tone: 'danger' },
 ];
 
-export const nextActions: readonly string[] = [
-  'Completar perfil macro com idiomas, paises-alvo e senioridade.',
-  'Importar a primeira vaga de referencia para testar o score.',
-  'Configurar Supabase Auth antes de abrir testes externos.',
+export const nextActions: readonly NextAction[] = [
+  {
+    label: 'Completar perfil macro com idiomas, paises-alvo e senioridade.',
+    route: '/app/profile',
+  },
+  {
+    label: 'Importar a primeira vaga de referencia para testar o score.',
+  },
+  {
+    label: 'Cadastrar experiencias profissionais estruturadas.',
+  },
 ];
 
 export const navFeatures: readonly string[] = [
