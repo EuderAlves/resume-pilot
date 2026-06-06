@@ -124,6 +124,6 @@ Validar uma experiencia simples, clara e vendavel com:
 
 - Projeto criado: `resume-pilot`.
 - URL do projeto: `https://antmqmgkvirbiopxkytx.supabase.co`.
+- Anon public key configurada nos environments.
 - Migration inicial preparada em `supabase/migrations/20260606010000_initial_resume_pilot_schema.sql`.
-- Pendente: copiar `anon public key` para os environments.
 - Pendente: aplicar a migration no SQL Editor ou via Supabase CLI.

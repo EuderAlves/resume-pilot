@@ -1,12 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 
+import { SupabaseService } from '../supabase/supabase.service';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: SupabaseService,
+          useValue: {
+            isConfigured: () => false,
+          },
+        },
+      ],
+    });
     service = TestBed.inject(AuthService);
   });
 

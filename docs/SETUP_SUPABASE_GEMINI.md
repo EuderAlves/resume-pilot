@@ -27,6 +27,7 @@ Projeto atual:
 
 ```txt
 Project URL: https://antmqmgkvirbiopxkytx.supabase.co
+Anon public key: configurada em src/environments/environment.ts e environment.prod.ts
 ```
 
 Depois atualize:
@@ -134,6 +135,7 @@ Assim protegemos a chave e conseguimos limitar uso por usuario no futuro.
 
 - Frontend Angular criado.
 - Supabase SDK instalado.
-- Login funciona em modo mock quando Supabase nao esta configurado.
+- Login funciona com Supabase quando URL e anon key estao configuradas.
+- Login ainda pode funcionar em modo mock se a configuracao do Supabase estiver vazia.
 - Edge Function placeholder criada em `supabase/functions/analyze-career-fit`.
 - Ainda falta criar o projeto Supabase real e aplicar schema/RLS.
