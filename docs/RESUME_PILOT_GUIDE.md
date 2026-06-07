@@ -54,9 +54,10 @@ Validar uma experiencia simples, clara e vendavel com:
 
 ### Fase 3 - Analise de Vagas e CV
 
-- Cadastro/importacao de vaga.
-- Extracao de requisitos e palavras-chave.
-- Score de aderencia perfil x vaga.
+- Cadastro de vaga por descricao colada. `feito`
+- Link opcional apenas para referencia. `feito`
+- Extracao local inicial de requisitos e palavras-chave. `feito`
+- Score inicial de aderencia perfil x vaga. `feito parcial`
 - Sugestoes de melhoria.
 - Geracao de versoes de CV por vaga.
 

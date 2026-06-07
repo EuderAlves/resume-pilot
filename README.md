@@ -60,6 +60,8 @@ O produto deve responder tres perguntas principais:
 - CRUD inicial de experiencias profissionais criado.
 - CRUD inicial de formacoes criado.
 - CRUD inicial de skills criado.
+- CRUD inicial de vagas criado com descricao colada pelo usuario.
+- Analise local inicial criada para extrair requisitos, idiomas, senioridade, modelo e score.
 - Edge Function placeholder criada para analise de carreira/vaga.
 - Asset visual da homepage criado e salvo em `public/images`.
 - Testes unitarios iniciais criados.
@@ -69,8 +71,7 @@ O produto deve responder tres perguntas principais:
 ### Falta Fazer
 
 - Confirmar configuracao final do Supabase Auth para e-mail/senha.
-- Criar cadastro/importacao de vagas.
-- Criar score de aderencia perfil x vaga.
+- Evoluir score de aderencia perfil x vaga com IA.
 - Criar gerador de versoes de CV por vaga.
 - Criar auditoria de LinkedIn.
 - Conectar Gemini na Edge Function.
@@ -80,7 +81,7 @@ O produto deve responder tres perguntas principais:
 
 ## Estado Atual
 
-O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial, onboarding do perfil profissional, CRUD inicial de experiencias, formacoes, skills e base de banco preparada.
+O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial, onboarding do perfil profissional, CRUD inicial de experiencias, formacoes, skills, vagas por descricao colada e base de banco preparada.
 
 O login usa Supabase quando `url` e `anonKey` estao preenchidos nos environments. Caso a configuracao esteja vazia, o `AuthService` entra em modo mock para desenvolvimento local.
 
@@ -99,6 +100,7 @@ Angular App
       -> Experiences
       -> Education
       -> Skills
+      -> Jobs
   -> Core
     -> Auth Service
     -> Supabase Service
@@ -143,6 +145,8 @@ Angular App
 | `src/app/features/education/data` | Modelos, mappers e servico de persistencia de formacoes. |
 | `src/app/features/skills/skills-page` | CRUD inicial de skills. |
 | `src/app/features/skills/data` | Modelos, mappers e servico de persistencia de skills. |
+| `src/app/features/jobs/jobs-page` | CRUD inicial de vagas com descricao colada pelo usuario. |
+| `src/app/features/jobs/data` | Modelos, mappers, analisador local e servico de persistencia de vagas. |
 | `src/environments/environment.ts` | Configuracao local/desenvolvimento. |
 | `src/environments/environment.prod.ts` | Configuracao de producao. |
 | `public/images/career-copilot-hero.png` | Imagem principal da homepage/login. |
@@ -164,6 +168,7 @@ Angular App
 /app/experiences -> ExperiencesPage com authGuard
 /app/education -> EducationPage com authGuard
 /app/skills -> SkillsPage com authGuard
+/app/jobs -> JobsPage com authGuard
 ```
 
 Arquivo responsavel:
@@ -308,6 +313,27 @@ src/app/features/skills/data/professional-skill.service.ts
 src/app/features/skills/data/skill-form.mapper.ts
 ```
 
+### Vagas
+
+```txt
+JobsPage
+  -> usuario cola a descricao da vaga
+  -> job-description-analyzer.ts
+    -> extrai requisitos, diferenciais, idiomas e score inicial
+  -> JobOpportunityService
+    -> SupabaseService
+      -> jobs
+```
+
+Arquivos responsaveis:
+
+```txt
+src/app/features/jobs/jobs-page
+src/app/features/jobs/data/job-opportunity.service.ts
+src/app/features/jobs/data/job-description-analyzer.ts
+src/app/features/jobs/data/job-form.mapper.ts
+```
+
 ### Analise com IA
 
 Fluxo planejado:
@@ -362,6 +388,7 @@ Esse seed procura o usuario `euder.alv@gmail.com` em `auth.users` e popula:
 - formacao;
 - skills;
 - experiencias em CI&T, NTT-Data e EPTV.
+- uma vaga de referencia para testar a tela de vagas.
 
 Para aplicar:
 

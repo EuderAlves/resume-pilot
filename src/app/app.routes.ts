@@ -42,6 +42,11 @@ export const routes: Routes = [
       import('./features/skills/skills-page/skills-page').then((m) => m.SkillsPage),
   },
   {
+    path: 'app/jobs',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/jobs/jobs-page/jobs-page').then((m) => m.JobsPage),
+  },
+  {
     path: 'app',
     canActivate: [authGuard],
     loadComponent: () =>

@@ -143,6 +143,7 @@ export const nextActions: readonly NextAction[] = [
   },
   {
     label: 'Importar a primeira vaga de referencia para testar o score.',
+    route: '/app/jobs',
   },
   {
     label: 'Revisar formacoes e skills para fechar a base do perfil.',

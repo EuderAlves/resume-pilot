@@ -202,4 +202,58 @@ begin
         'Participei de dailies e plannings para acompanhar progresso, remover impedimentos e priorizar entregas.'
       ]
     );
+
+  delete from public.jobs
+  where user_id = target_user_id
+    and source_url = 'seed:euder-angular-portugal';
+
+  insert into public.jobs (
+    user_id,
+    title,
+    company,
+    location,
+    country,
+    source_url,
+    source,
+    description,
+    language_requirements,
+    required_skills,
+    desired_skills,
+    seniority,
+    work_model,
+    visa_signal,
+    salary,
+    fit_score,
+    analysis
+  )
+  values (
+    target_user_id,
+    'Frontend Angular Developer',
+    'Empresa de tecnologia europeia',
+    'Lisboa / Remoto',
+    'Portugal',
+    'seed:euder-angular-portugal',
+    'manual',
+    'We are looking for a mid-level Frontend Angular Developer to join an international product team. Requirements: Angular, TypeScript, JavaScript, REST APIs, Git, unit testing and Agile/Scrum experience. Nice to have: Node.js, Azure, GCP, Jenkins and Figma. Advanced English is required. Remote work is possible, and relocation support can be discussed.',
+    array['Ingles'],
+    array['Angular', 'TypeScript', 'JavaScript', 'REST APIs', 'Git', 'Testes unitarios', 'Metodologias ageis'],
+    array['Node.js', 'Azure', 'GCP', 'Jenkins', 'Figma'],
+    'mid-level',
+    'remote',
+    'sinal positivo',
+    null,
+    75,
+    '{
+      "requiredSkills":["Angular","TypeScript","JavaScript","REST APIs","Git","Testes unitarios","Metodologias ageis"],
+      "desiredSkills":["Node.js","Azure","GCP","Jenkins","Figma"],
+      "languageRequirements":["Ingles"],
+      "keywords":["Angular","TypeScript","JavaScript","REST APIs","Git","Testes unitarios","Metodologias ageis","Node.js","Azure","GCP","Jenkins","Figma","Ingles","mid-level"],
+      "seniority":"mid-level",
+      "workModel":"remote",
+      "visaSignal":"sinal positivo",
+      "fitScore":75,
+      "matchedSkills":["Angular","TypeScript","JavaScript","Testes unitarios","Metodologias ageis","Node.js","Azure","GCP","Jenkins","Figma"],
+      "missingSkills":["REST APIs","Git"]
+    }'::jsonb
+  );
 end $$;

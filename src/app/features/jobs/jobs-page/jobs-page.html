@@ -1,0 +1,211 @@
+<main class="jobs-page">
+  <header class="topbar">
+    <a class="back-link" routerLink="/app">
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Dashboard
+    </a>
+
+    <button class="new-button" type="button" (click)="startNewJob()">
+      <svg lucidePlus aria-hidden="true"></svg>
+      Nova vaga
+    </button>
+  </header>
+
+  <section class="page-heading">
+    <p class="eyebrow">Analise por texto</p>
+    <h1>Vagas</h1>
+    <p>Cole a descricao completa da oportunidade para extrair requisitos e comparar com seu perfil.</p>
+  </section>
+
+  <section class="content-grid">
+    <aside class="job-list" aria-label="Vagas cadastradas">
+      <div class="panel-title">
+        <svg lucideTarget aria-hidden="true"></svg>
+        <h2>Oportunidades</h2>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Carregando vagas...</p>
+      } @else if (jobs().length === 0) {
+        <p class="empty-state">Nenhuma vaga cadastrada ainda.</p>
+      } @else {
+        <div class="cards">
+          @for (job of jobs(); track job.id) {
+            <article class="job-card" [class.active]="job.id === selectedJobId()">
+              <div class="score-row">
+                <div>
+                  <h3>{{ job.title }}</h3>
+                  <p>{{ job.company || 'Empresa nao informada' }}</p>
+                </div>
+                <strong>{{ job.fitScore }}%</strong>
+              </div>
+
+              <div class="tags">
+                @if (job.country) {
+                  <span>{{ job.country }}</span>
+                }
+                @if (job.workModel) {
+                  <span>{{ labelFor(workModelOptions, job.workModel) }}</span>
+                }
+                @if (job.seniority) {
+                  <span>{{ labelFor(seniorityOptions, job.seniority) }}</span>
+                }
+              </div>
+
+              <div class="card-meta">
+                <span>{{ job.requiredSkills.length }} obrigatorias</span>
+                <span>{{ job.desiredSkills.length }} desejaveis</span>
+              </div>
+
+              <div class="card-actions">
+                <button type="button" (click)="editJob(job)">
+                  <svg lucidePenLine aria-hidden="true"></svg>
+                  Editar
+                </button>
+                <button type="button" class="danger" (click)="deleteJob(job)">
+                  <svg lucideTrash2 aria-hidden="true"></svg>
+                  Remover
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </aside>
+
+    <form class="job-form" [formGroup]="form" (ngSubmit)="saveJob()">
+      <div class="panel-title">
+        <svg lucideSave aria-hidden="true"></svg>
+        <h2>{{ isEditing() ? 'Editar vaga' : 'Nova vaga' }}</h2>
+      </div>
+
+      <div class="field-grid">
+        <label>
+          <span>Cargo</span>
+          <input type="text" formControlName="title" placeholder="Frontend Angular Developer" />
+        </label>
+
+        <label>
+          <span>Empresa</span>
+          <input type="text" formControlName="company" placeholder="Nome da empresa" />
+        </label>
+
+        <label>
+          <span>Pais</span>
+          <input type="text" formControlName="country" placeholder="Portugal" />
+        </label>
+
+        <label>
+          <span>Local</span>
+          <input type="text" formControlName="location" placeholder="Lisboa, Remoto" />
+        </label>
+
+        <label>
+          <span>Senioridade</span>
+          <select formControlName="seniority">
+            @for (option of seniorityOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          <span>Modelo</span>
+          <select formControlName="workModel">
+            @for (option of workModelOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          <span>Salario</span>
+          <input type="text" formControlName="salary" placeholder="Opcional" />
+        </label>
+
+        <label>
+          <span>Link opcional</span>
+          <input type="url" formControlName="sourceUrl" placeholder="Apenas para referencia" />
+        </label>
+
+        <label class="span-2">
+          <span>Descricao da vaga</span>
+          <textarea
+            rows="12"
+            formControlName="description"
+            placeholder="Cole aqui a descricao completa da vaga, incluindo requisitos, skills, idiomas e observacoes."
+            (input)="analyzeDescription()"
+          ></textarea>
+        </label>
+      </div>
+
+      <button class="analyze-button" type="button" (click)="analyzeDescription()">
+        <svg lucideWandSparkles aria-hidden="true"></svg>
+        Analisar texto
+      </button>
+
+      @if (analysisPreview(); as analysis) {
+        <section class="analysis-panel" aria-label="Analise inicial da vaga">
+          <div class="analysis-score">
+            <span>Score inicial</span>
+            <strong>{{ analysis.fitScore }}%</strong>
+          </div>
+
+          <div class="analysis-grid">
+            <div>
+              <h3>Requisitos encontrados</h3>
+              <p>{{ analysis.requiredSkills.join(', ') || 'Nenhum requisito detectado.' }}</p>
+            </div>
+
+            <div>
+              <h3>Diferenciais</h3>
+              <p>{{ analysis.desiredSkills.join(', ') || 'Nenhum diferencial detectado.' }}</p>
+            </div>
+
+            <div>
+              <h3>Match do perfil</h3>
+              <p>{{ analysis.matchedSkills.join(', ') || 'Nenhuma skill do perfil encontrada.' }}</p>
+            </div>
+
+            <div>
+              <h3>Lacunas</h3>
+              <p>{{ analysis.missingSkills.join(', ') || 'Nenhuma lacuna detectada.' }}</p>
+            </div>
+
+            <div>
+              <h3>Idiomas</h3>
+              <p>{{ analysis.languageRequirements.join(', ') || 'Nao detectado.' }}</p>
+            </div>
+
+            <div>
+              <h3>Visto/relocacao</h3>
+              <p>{{ analysis.visaSignal || 'Nao detectado.' }}</p>
+            </div>
+          </div>
+        </section>
+      }
+
+      @if (form.invalid && form.touched) {
+        <p class="form-alert">Preencha cargo e cole uma descricao com pelo menos 80 caracteres.</p>
+      }
+
+      @if (error()) {
+        <p class="form-alert">{{ error() }}</p>
+      }
+
+      @if (feedback()) {
+        <p class="form-success">
+          <svg lucideCheck aria-hidden="true"></svg>
+          {{ feedback() }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <button class="secondary-button" type="button" (click)="startNewJob()">Limpar</button>
+        <button class="primary-button" type="submit" [disabled]="isSaving()">
+          {{ isSaving() ? 'Salvando...' : 'Salvar vaga' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</main>
