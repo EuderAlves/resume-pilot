@@ -511,6 +511,12 @@ Guia para publicar o MVP no Cloudflare Pages:
 docs/DEPLOY_CLOUDFLARE_BETA.md
 ```
 
+Para Cloudflare Pages, use Node:
+
+```txt
+NODE_VERSION=22.16.0
+```
+
 Manual para enviar aos usuarios beta:
 
 ```txt

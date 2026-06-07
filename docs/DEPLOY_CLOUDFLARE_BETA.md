@@ -49,7 +49,7 @@ Root directory: /
 10. Em `Environment variables`, adicione:
 
 ```txt
-NODE_VERSION=20.20.0
+NODE_VERSION=22.16.0
 ```
 
 11. Clique em `Save and Deploy`.
@@ -134,10 +134,40 @@ Esse seed popula perfil, experiencias, formacoes, skills, vaga, candidatura, CV 
 - Login real foi testado em producao.
 - Rotas internas funcionam ao atualizar a pagina.
 
+## Correcao: erro do Wrangler com Node 20
+
+Se o deploy mostrar:
+
+```txt
+Wrangler requires at least Node.js v22.0.0. You are using v20.20.0.
+```
+
+Corrija no Cloudflare:
+
+1. Abra `Workers & Pages`.
+2. Abra o projeto `resume-pilot`.
+3. Va em `Settings`.
+4. Abra `Build & deployments`.
+5. Em `Environment variables`, troque:
+
+```txt
+NODE_VERSION=20.20.0
+```
+
+por:
+
+```txt
+NODE_VERSION=22.16.0
+```
+
+6. Salve.
+7. Rode `Retry deployment`.
+
+O projeto tambem tem `.node-version` com `22.16.0`, entao novos deploys devem usar Node 22 mesmo se a variavel nao estiver configurada.
+
 ## 7. O que ainda nao esta no beta
 
 - Gemini real ainda nao esta conectado.
 - Upload/download de PDF/DOCX ainda nao esta ativo.
 - Importacao automatica por link de vaga nao faz parte do MVP.
 - O CV gerado ainda fica estruturado dentro do app, nao exportado em PDF.
-
