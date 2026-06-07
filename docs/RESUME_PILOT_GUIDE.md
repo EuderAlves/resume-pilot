@@ -47,7 +47,9 @@ Validar uma experiencia simples, clara e vendavel com:
 - Persistencia do perfil em `professional_profiles`. `feito`
 - Seed da planilha para usuario de validacao. `feito`
 - Experiencias profissionais estruturadas. `feito parcial`
-- Educacao, idiomas, skills e paises-alvo.
+- Formacoes estruturadas. `feito`
+- Skills estruturadas. `feito`
+- Idiomas e paises-alvo no perfil macro. `feito`
 - Banco de evidencias profissionais reutilizaveis.
 
 ### Fase 3 - Analise de Vagas e CV

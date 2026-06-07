@@ -2,9 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   LucideBriefcaseBusiness,
+  LucideBrainCircuit,
   LucideChartColumnIncreasing,
   LucideFileText,
   LucideGlobe,
+  LucideGraduationCap,
   LucideLayoutDashboard,
   LucideLogOut,
   LucideSparkles,
@@ -20,9 +22,11 @@ import { dashboardMetrics, nextActions, pipelineColumns } from '../../../core/da
   imports: [
     RouterLink,
     LucideBriefcaseBusiness,
+    LucideBrainCircuit,
     LucideChartColumnIncreasing,
     LucideFileText,
     LucideGlobe,
+    LucideGraduationCap,
     LucideLayoutDashboard,
     LucideLogOut,
     LucideSparkles,

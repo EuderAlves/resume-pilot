@@ -58,6 +58,8 @@ O produto deve responder tres perguntas principais:
 - Serviço de perfil criado com mappers testados.
 - Seed SQL criado a partir da planilha para o usuario `euder.alv@gmail.com`.
 - CRUD inicial de experiencias profissionais criado.
+- CRUD inicial de formacoes criado.
+- CRUD inicial de skills criado.
 - Edge Function placeholder criada para analise de carreira/vaga.
 - Asset visual da homepage criado e salvo em `public/images`.
 - Testes unitarios iniciais criados.
@@ -67,7 +69,6 @@ O produto deve responder tres perguntas principais:
 ### Falta Fazer
 
 - Confirmar configuracao final do Supabase Auth para e-mail/senha.
-- Criar CRUD de educacao e skills.
 - Criar cadastro/importacao de vagas.
 - Criar score de aderencia perfil x vaga.
 - Criar gerador de versoes de CV por vaga.
@@ -79,7 +80,7 @@ O produto deve responder tres perguntas principais:
 
 ## Estado Atual
 
-O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial, onboarding do perfil profissional, CRUD inicial de experiencias e base de banco preparada.
+O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial, onboarding do perfil profissional, CRUD inicial de experiencias, formacoes, skills e base de banco preparada.
 
 O login usa Supabase quando `url` e `anonKey` estao preenchidos nos environments. Caso a configuracao esteja vazia, o `AuthService` entra em modo mock para desenvolvimento local.
 
@@ -96,6 +97,8 @@ Angular App
       -> Dashboard
       -> Profile
       -> Experiences
+      -> Education
+      -> Skills
   -> Core
     -> Auth Service
     -> Supabase Service
@@ -136,6 +139,10 @@ Angular App
 | `src/app/features/profile/data` | Modelos, mappers e servico de persistencia do perfil profissional. |
 | `src/app/features/experiences/experiences-page` | CRUD inicial de experiencias profissionais. |
 | `src/app/features/experiences/data` | Modelos, mappers e servico de persistencia de experiencias. |
+| `src/app/features/education/education-page` | CRUD inicial de formacoes. |
+| `src/app/features/education/data` | Modelos, mappers e servico de persistencia de formacoes. |
+| `src/app/features/skills/skills-page` | CRUD inicial de skills. |
+| `src/app/features/skills/data` | Modelos, mappers e servico de persistencia de skills. |
 | `src/environments/environment.ts` | Configuracao local/desenvolvimento. |
 | `src/environments/environment.prod.ts` | Configuracao de producao. |
 | `public/images/career-copilot-hero.png` | Imagem principal da homepage/login. |
@@ -155,6 +162,8 @@ Angular App
 /app    -> DashboardPage com authGuard
 /app/profile -> ProfileOnboardingPage com authGuard
 /app/experiences -> ExperiencesPage com authGuard
+/app/education -> EducationPage com authGuard
+/app/skills -> SkillsPage com authGuard
 ```
 
 Arquivo responsavel:
@@ -259,6 +268,44 @@ Arquivos responsaveis:
 src/app/features/experiences/experiences-page
 src/app/features/experiences/data/professional-experience.service.ts
 src/app/features/experiences/data/experience-form.mapper.ts
+```
+
+### Formacoes
+
+```txt
+EducationPage
+  -> education-form.mapper.ts
+    -> converte campos do formulario
+  -> EducationService
+    -> SupabaseService
+      -> education
+```
+
+Arquivos responsaveis:
+
+```txt
+src/app/features/education/education-page
+src/app/features/education/data/education.service.ts
+src/app/features/education/data/education-form.mapper.ts
+```
+
+### Skills
+
+```txt
+SkillsPage
+  -> skill-form.mapper.ts
+    -> converte categoria, nivel e evidencia
+  -> ProfessionalSkillService
+    -> SupabaseService
+      -> skills
+```
+
+Arquivos responsaveis:
+
+```txt
+src/app/features/skills/skills-page
+src/app/features/skills/data/professional-skill.service.ts
+src/app/features/skills/data/skill-form.mapper.ts
 ```
 
 ### Analise com IA

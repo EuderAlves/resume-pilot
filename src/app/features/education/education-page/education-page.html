@@ -1,0 +1,120 @@
+<main class="education-page">
+  <header class="topbar">
+    <a class="back-link" routerLink="/app">
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Dashboard
+    </a>
+
+    <button class="new-button" type="button" (click)="startNewEducation()">
+      <svg lucidePlus aria-hidden="true"></svg>
+      Nova formacao
+    </button>
+  </header>
+
+  <section class="page-heading">
+    <p class="eyebrow">Base academica</p>
+    <h1>Formacoes</h1>
+    <p>Organize cursos, instituicoes e periodos para sustentar CVs e analises de aderencia.</p>
+  </section>
+
+  <section class="content-grid">
+    <aside class="record-list" aria-label="Formacoes cadastradas">
+      <div class="panel-title">
+        <svg lucideGraduationCap aria-hidden="true"></svg>
+        <h2>Historico</h2>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Carregando formacoes...</p>
+      } @else if (educationList().length === 0) {
+        <p class="empty-state">Nenhuma formacao cadastrada ainda.</p>
+      } @else {
+        <div class="cards">
+          @for (education of educationList(); track education.id) {
+            <article class="record-card" [class.active]="education.id === selectedEducationId()">
+              <div>
+                <h3>{{ education.course }}</h3>
+                <p>{{ education.institution }}</p>
+                <span>
+                  {{ education.startDate || 'Inicio nao informado' }} -
+                  {{ education.endDate || 'Fim nao informado' }}
+                </span>
+              </div>
+
+              @if (education.description) {
+                <p class="description">{{ education.description }}</p>
+              }
+
+              <div class="card-actions">
+                <button type="button" (click)="editEducation(education)">
+                  <svg lucidePenLine aria-hidden="true"></svg>
+                  Editar
+                </button>
+                <button type="button" class="danger" (click)="deleteEducation(education)">
+                  <svg lucideTrash2 aria-hidden="true"></svg>
+                  Remover
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </aside>
+
+    <form class="record-form" [formGroup]="form" (ngSubmit)="saveEducation()">
+      <div class="panel-title">
+        <svg lucideSave aria-hidden="true"></svg>
+        <h2>{{ isEditing() ? 'Editar formacao' : 'Nova formacao' }}</h2>
+      </div>
+
+      <div class="field-grid">
+        <label>
+          <span>Curso</span>
+          <input type="text" formControlName="course" placeholder="Desenvolvimento Web Full Stack" />
+        </label>
+
+        <label>
+          <span>Instituicao</span>
+          <input type="text" formControlName="institution" placeholder="PUC Minas" />
+        </label>
+
+        <label>
+          <span>Inicio</span>
+          <input type="date" formControlName="startDate" />
+        </label>
+
+        <label>
+          <span>Fim</span>
+          <input type="date" formControlName="endDate" />
+        </label>
+
+        <label class="span-2">
+          <span>Descricao</span>
+          <textarea rows="5" formControlName="description" placeholder="Foco, projetos e temas relevantes"></textarea>
+        </label>
+      </div>
+
+      @if (form.invalid && form.touched) {
+        <p class="form-alert">Preencha curso, instituicao e inicio.</p>
+      }
+
+      @if (error()) {
+        <p class="form-alert">{{ error() }}</p>
+      }
+
+      @if (feedback()) {
+        <p class="form-success">
+          <svg lucideCheck aria-hidden="true"></svg>
+          {{ feedback() }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <button class="secondary-button" type="button" (click)="startNewEducation()">Limpar</button>
+        <button class="primary-button" type="submit" [disabled]="isSaving()">
+          {{ isSaving() ? 'Salvando...' : 'Salvar formacao' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</main>

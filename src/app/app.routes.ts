@@ -30,6 +30,18 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'app/education',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/education/education-page/education-page').then((m) => m.EducationPage),
+  },
+  {
+    path: 'app/skills',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/skills/skills-page/skills-page').then((m) => m.SkillsPage),
+  },
+  {
     path: 'app',
     canActivate: [authGuard],
     loadComponent: () =>

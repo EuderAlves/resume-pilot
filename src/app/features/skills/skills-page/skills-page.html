@@ -1,0 +1,122 @@
+<main class="skills-page">
+  <header class="topbar">
+    <a class="back-link" routerLink="/app">
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Dashboard
+    </a>
+
+    <button class="new-button" type="button" (click)="startNewSkill()">
+      <svg lucidePlus aria-hidden="true"></svg>
+      Nova skill
+    </button>
+  </header>
+
+  <section class="page-heading">
+    <p class="eyebrow">Mapa de competencias</p>
+    <h1>Skills</h1>
+    <p>Registre habilidades, niveis e evidencias para comparar seu perfil com vagas reais.</p>
+  </section>
+
+  <section class="content-grid">
+    <aside class="skill-list" aria-label="Skills cadastradas">
+      <div class="panel-title">
+        <svg lucideBrainCircuit aria-hidden="true"></svg>
+        <h2>Inventario</h2>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Carregando skills...</p>
+      } @else if (skills().length === 0) {
+        <p class="empty-state">Nenhuma skill cadastrada ainda.</p>
+      } @else {
+        <div class="cards">
+          @for (skill of skills(); track skill.id || skill.name) {
+            <article class="skill-card" [class.active]="skill.id === selectedSkillId()">
+              <div>
+                <h3>{{ skill.name }}</h3>
+                <div class="tags">
+                  <span>{{ labelFor(categoryOptions, skill.category) }}</span>
+                  <span>{{ labelFor(levelOptions, skill.level) }}</span>
+                </div>
+              </div>
+
+              @if (skill.evidence) {
+                <p>{{ skill.evidence }}</p>
+              }
+
+              <div class="card-actions">
+                <button type="button" (click)="editSkill(skill)">
+                  <svg lucidePenLine aria-hidden="true"></svg>
+                  Editar
+                </button>
+                <button type="button" class="danger" (click)="deleteSkill(skill)">
+                  <svg lucideTrash2 aria-hidden="true"></svg>
+                  Remover
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </aside>
+
+    <form class="skill-form" [formGroup]="form" (ngSubmit)="saveSkill()">
+      <div class="panel-title">
+        <svg lucideSave aria-hidden="true"></svg>
+        <h2>{{ isEditing() ? 'Editar skill' : 'Nova skill' }}</h2>
+      </div>
+
+      <div class="field-grid">
+        <label>
+          <span>Nome</span>
+          <input type="text" formControlName="name" placeholder="Angular" />
+        </label>
+
+        <label>
+          <span>Categoria</span>
+          <select formControlName="category">
+            @for (option of categoryOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          <span>Nivel</span>
+          <select formControlName="level">
+            @for (option of levelOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="span-2">
+          <span>Evidencia</span>
+          <textarea rows="5" formControlName="evidence" placeholder="Onde essa skill aparece na sua experiencia"></textarea>
+        </label>
+      </div>
+
+      @if (form.invalid && form.touched) {
+        <p class="form-alert">Preencha nome, categoria e nivel.</p>
+      }
+
+      @if (error()) {
+        <p class="form-alert">{{ error() }}</p>
+      }
+
+      @if (feedback()) {
+        <p class="form-success">
+          <svg lucideCheck aria-hidden="true"></svg>
+          {{ feedback() }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <button class="secondary-button" type="button" (click)="startNewSkill()">Limpar</button>
+        <button class="primary-button" type="submit" [disabled]="isSaving()">
+          {{ isSaving() ? 'Salvando...' : 'Salvar skill' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</main>
