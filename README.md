@@ -56,6 +56,8 @@ O produto deve responder tres perguntas principais:
 - Tela de onboarding do perfil profissional criada.
 - Perfil profissional salvo na tabela `professional_profiles`.
 - Serviço de perfil criado com mappers testados.
+- Seed SQL criado a partir da planilha para o usuario `euder.alv@gmail.com`.
+- CRUD inicial de experiencias profissionais criado.
 - Edge Function placeholder criada para analise de carreira/vaga.
 - Asset visual da homepage criado e salvo em `public/images`.
 - Testes unitarios iniciais criados.
@@ -65,7 +67,7 @@ O produto deve responder tres perguntas principais:
 ### Falta Fazer
 
 - Confirmar configuracao final do Supabase Auth para e-mail/senha.
-- Criar CRUD de experiencias, educacao e skills.
+- Criar CRUD de educacao e skills.
 - Criar cadastro/importacao de vagas.
 - Criar score de aderencia perfil x vaga.
 - Criar gerador de versoes de CV por vaga.
@@ -77,7 +79,7 @@ O produto deve responder tres perguntas principais:
 
 ## Estado Atual
 
-O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial, onboarding do perfil profissional e base de banco preparada.
+O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial, onboarding do perfil profissional, CRUD inicial de experiencias e base de banco preparada.
 
 O login usa Supabase quando `url` e `anonKey` estao preenchidos nos environments. Caso a configuracao esteja vazia, o `AuthService` entra em modo mock para desenvolvimento local.
 
@@ -93,6 +95,7 @@ Angular App
       -> Auth
       -> Dashboard
       -> Profile
+      -> Experiences
   -> Core
     -> Auth Service
     -> Supabase Service
@@ -131,10 +134,13 @@ Angular App
 | `src/app/features/dashboard/dashboard-page` | Dashboard inicial do usuario logado. |
 | `src/app/features/profile/profile-onboarding-page` | Tela de onboarding/edicao do perfil profissional base. |
 | `src/app/features/profile/data` | Modelos, mappers e servico de persistencia do perfil profissional. |
+| `src/app/features/experiences/experiences-page` | CRUD inicial de experiencias profissionais. |
+| `src/app/features/experiences/data` | Modelos, mappers e servico de persistencia de experiencias. |
 | `src/environments/environment.ts` | Configuracao local/desenvolvimento. |
 | `src/environments/environment.prod.ts` | Configuracao de producao. |
 | `public/images/career-copilot-hero.png` | Imagem principal da homepage/login. |
 | `supabase/migrations` | SQL de schema, tabelas, indices e RLS. |
+| `supabase/seeds` | Seeds opcionais para popular dados de teste. |
 | `supabase/functions/analyze-career-fit` | Edge Function para futura analise com Gemini. |
 | `docs/RESUME_PILOT_GUIDE.md` | Guia de produto, roadmap e regras de engenharia. |
 | `docs/SETUP_SUPABASE_GEMINI.md` | Passos de configuracao do Supabase e Gemini. |
@@ -148,6 +154,7 @@ Angular App
 /login  -> LoginPage com guestGuard
 /app    -> DashboardPage com authGuard
 /app/profile -> ProfileOnboardingPage com authGuard
+/app/experiences -> ExperiencesPage com authGuard
 ```
 
 Arquivo responsavel:
@@ -235,6 +242,25 @@ src/app/features/profile/data/professional-profile.service.ts
 src/app/features/profile/data/profile-form.mapper.ts
 ```
 
+### Experiencias Profissionais
+
+```txt
+ExperiencesPage
+  -> experience-form.mapper.ts
+    -> converte ferramentas, atividades, resultados e bullets
+  -> ProfessionalExperienceService
+    -> SupabaseService
+      -> experiences
+```
+
+Arquivos responsaveis:
+
+```txt
+src/app/features/experiences/experiences-page
+src/app/features/experiences/data/professional-experience.service.ts
+src/app/features/experiences/data/experience-form.mapper.ts
+```
+
 ### Analise com IA
 
 Fluxo planejado:
@@ -274,6 +300,28 @@ https://antmqmgkvirbiopxkytx.supabase.co
 - `linkedin_audits`
 - `ai_analysis_runs`
 - `documents`
+
+### Seed da Planilha
+
+Foi criado um seed opcional com dados extraidos da planilha inicial:
+
+```txt
+supabase/seeds/20260606103000_seed_euder_resume_data.sql
+```
+
+Esse seed procura o usuario `euder.alv@gmail.com` em `auth.users` e popula:
+
+- perfil profissional;
+- formacao;
+- skills;
+- experiencias em CI&T, NTT-Data e EPTV.
+
+Para aplicar:
+
+1. Confirme que o usuario `euder.alv@gmail.com` ja existe no Supabase Auth.
+2. Abra o SQL Editor do Supabase.
+3. Cole o conteudo do seed.
+4. Clique em `Run`.
 
 ### Seguranca
 

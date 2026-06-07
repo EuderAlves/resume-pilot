@@ -138,4 +138,17 @@ Assim protegemos a chave e conseguimos limitar uso por usuario no futuro.
 - Login funciona com Supabase quando URL e anon key estao configuradas.
 - Login ainda pode funcionar em modo mock se a configuracao do Supabase estiver vazia.
 - Edge Function placeholder criada em `supabase/functions/analyze-career-fit`.
-- Ainda falta criar o projeto Supabase real e aplicar schema/RLS.
+- Schema/RLS inicial aplicado.
+- Seed opcional da planilha criado em `supabase/seeds/20260606103000_seed_euder_resume_data.sql`.
+
+## Seed da Planilha
+
+Para popular dados reais de validacao do usuario `euder.alv@gmail.com`:
+
+1. Confirme que o cadastro desse e-mail ja existe em `Authentication > Users`.
+2. Abra `SQL Editor`.
+3. Crie uma nova query.
+4. Cole o conteudo de `supabase/seeds/20260606103000_seed_euder_resume_data.sql`.
+5. Clique em `Run`.
+
+O seed atualiza o perfil e insere dados de formacao, skills e experiencias extraidos da planilha inicial.

@@ -1,0 +1,163 @@
+<main class="experiences-page">
+  <header class="topbar">
+    <a class="back-link" routerLink="/app">
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Dashboard
+    </a>
+
+    <button class="new-button" type="button" (click)="startNewExperience()">
+      <svg lucidePlus aria-hidden="true"></svg>
+      Nova experiencia
+    </button>
+  </header>
+
+  <section class="page-heading">
+    <p class="eyebrow">Banco de evidencias</p>
+    <h1>Experiencias profissionais</h1>
+    <p>
+      Cadastre atividades, ferramentas, resultados e bullets. Esses dados serao usados para adaptar
+      CVs e LinkedIn sem inventar informacoes.
+    </p>
+  </section>
+
+  <section class="content-grid">
+    <aside class="experience-list" aria-label="Experiencias cadastradas">
+      <div class="panel-title">
+        <svg lucideBriefcaseBusiness aria-hidden="true"></svg>
+        <h2>Historico</h2>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Carregando experiencias...</p>
+      } @else if (experiences().length === 0) {
+        <p class="empty-state">Nenhuma experiencia cadastrada ainda.</p>
+      } @else {
+        <div class="cards">
+          @for (experience of experiences(); track experience.id) {
+            <article class="experience-card" [class.active]="experience.id === selectedExperienceId()">
+              <div>
+                <h3>{{ experience.company }}</h3>
+                <p>{{ experience.role }}</p>
+                <span>
+                  {{ experience.startDate || 'Inicio nao informado' }} -
+                  {{ experience.isCurrent ? 'Atual' : experience.endDate || 'Fim nao informado' }}
+                </span>
+              </div>
+
+              <div class="card-meta">
+                <span>{{ experience.tools.length }} ferramentas</span>
+                <span>{{ experience.generatedBullets.length }} bullets</span>
+              </div>
+
+              <div class="card-actions">
+                <button type="button" (click)="editExperience(experience)">
+                  <svg lucidePenLine aria-hidden="true"></svg>
+                  Editar
+                </button>
+                <button type="button" class="danger" (click)="deleteExperience(experience)">
+                  <svg lucideTrash2 aria-hidden="true"></svg>
+                  Remover
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </aside>
+
+    <form class="experience-form" [formGroup]="form" (ngSubmit)="saveExperience()">
+      <div class="panel-title">
+        <svg lucideSave aria-hidden="true"></svg>
+        <h2>{{ isEditing() ? 'Editar experiencia' : 'Nova experiencia' }}</h2>
+      </div>
+
+      <div class="field-grid">
+        <label>
+          <span>Empresa</span>
+          <input type="text" formControlName="company" placeholder="CI&T" />
+        </label>
+
+        <label>
+          <span>Cargo</span>
+          <input type="text" formControlName="role" placeholder="Analista de Sistemas Pl" />
+        </label>
+
+        <label>
+          <span>Local</span>
+          <input type="text" formControlName="location" placeholder="Brasil, Remoto" />
+        </label>
+
+        <label>
+          <span>Inicio</span>
+          <input type="date" formControlName="startDate" />
+        </label>
+
+        <label>
+          <span>Fim</span>
+          <input type="date" formControlName="endDate" />
+        </label>
+
+        <label class="checkbox-field">
+          <input type="checkbox" formControlName="isCurrent" />
+          <span>Experiencia atual</span>
+        </label>
+
+        <label class="span-2">
+          <span>Ferramentas</span>
+          <input type="text" formControlName="toolsInput" placeholder="Angular, TypeScript, Jira" />
+        </label>
+
+        <label class="span-2">
+          <span>Atividades</span>
+          <textarea
+            rows="5"
+            formControlName="activitiesInput"
+            placeholder="Desenvolver em Angular | Todos os dias | Entregar codigo limpo"
+          ></textarea>
+        </label>
+
+        <label class="span-2">
+          <span>Resultados e reconhecimentos</span>
+          <textarea
+            rows="4"
+            formControlName="achievementsInput"
+            placeholder="Uma linha por resultado relevante"
+          ></textarea>
+        </label>
+
+        <label class="span-2">
+          <span>Bullets prontos para CV</span>
+          <textarea
+            rows="5"
+            formControlName="generatedBulletsInput"
+            placeholder="Uma linha por bullet profissional"
+          ></textarea>
+        </label>
+      </div>
+
+      @if (form.invalid && form.touched) {
+        <p class="form-alert">Preencha empresa, cargo, inicio, ferramentas e atividades.</p>
+      }
+
+      @if (error()) {
+        <p class="form-alert">{{ error() }}</p>
+      }
+
+      @if (feedback()) {
+        <p class="form-success">
+          <svg lucideCheck aria-hidden="true"></svg>
+          {{ feedback() }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <button class="secondary-button" type="button" (click)="startNewExperience()">
+          Limpar
+        </button>
+        <button class="primary-button" type="submit" [disabled]="isSaving()">
+          {{ isSaving() ? 'Salvando...' : 'Salvar experiencia' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</main>

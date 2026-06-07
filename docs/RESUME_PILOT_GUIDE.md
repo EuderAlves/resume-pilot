@@ -45,7 +45,8 @@ Validar uma experiencia simples, clara e vendavel com:
 
 - Cadastro do perfil macro. `feito`
 - Persistencia do perfil em `professional_profiles`. `feito`
-- Experiencias profissionais estruturadas.
+- Seed da planilha para usuario de validacao. `feito`
+- Experiencias profissionais estruturadas. `feito parcial`
 - Educacao, idiomas, skills e paises-alvo.
 - Banco de evidencias profissionais reutilizaveis.
 

@@ -146,6 +146,7 @@ export const nextActions: readonly NextAction[] = [
   },
   {
     label: 'Cadastrar experiencias profissionais estruturadas.',
+    route: '/app/experiences',
   },
 ];
 

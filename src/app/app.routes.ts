@@ -22,6 +22,14 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'app/experiences',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/experiences/experiences-page/experiences-page').then(
+        (m) => m.ExperiencesPage,
+      ),
+  },
+  {
     path: 'app',
     canActivate: [authGuard],
     loadComponent: () =>
