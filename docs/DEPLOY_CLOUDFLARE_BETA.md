@@ -1,0 +1,143 @@
+# Deploy Beta - resumePilot
+
+Este guia sobe o MVP do resumePilot para uma URL publica gratuita usando Cloudflare Pages conectado ao GitHub.
+
+## Objetivo
+
+Publicar uma versao beta para 3 usuarios reais testarem o fluxo principal:
+
+- cadastro/login;
+- perfil;
+- experiencias, formacoes e skills;
+- vagas;
+- pipeline;
+- CV por vaga;
+- auditoria de LinkedIn.
+
+## Pre-requisitos
+
+- Repositorio GitHub atualizado: `https://github.com/EuderAlves/resume-pilot`
+- Projeto Supabase ativo: `resume-pilot`
+- Build local passando:
+
+```bash
+npm run build
+npm test -- --watch=false
+```
+
+## 1. Criar o projeto no Cloudflare Pages
+
+1. Acesse `https://dash.cloudflare.com`.
+2. Entre na conta.
+3. Va em `Workers & Pages`.
+4. Clique em `Create application`.
+5. Selecione `Pages`.
+6. Clique em `Connect to Git`.
+7. Conecte sua conta GitHub.
+8. Escolha o repositorio `resume-pilot`.
+9. Configure:
+
+```txt
+Project name: resume-pilot
+Production branch: main
+Framework preset: Angular ou None
+Build command: npm run build
+Build output directory: dist/resume-pilot/browser
+Root directory: /
+```
+
+10. Em `Environment variables`, adicione:
+
+```txt
+NODE_VERSION=20.20.0
+```
+
+11. Clique em `Save and Deploy`.
+
+## 2. Confirmar URL publicada
+
+Ao final do deploy, o Cloudflare deve gerar uma URL parecida com:
+
+```txt
+https://resume-pilot.pages.dev
+```
+
+Abra essa URL e valide:
+
+- homepage carrega;
+- botao de login abre `/login`;
+- atualizar a pagina em `/login` nao gera 404;
+- depois do login, atualizar `/app`, `/app/jobs` e `/app/cv` nao gera 404.
+
+O arquivo `public/_redirects` ja foi criado para permitir rotas internas do Angular em hospedagem estatica.
+
+## 3. Configurar Supabase Auth para producao
+
+No Supabase:
+
+1. Abra o projeto `resume-pilot`.
+2. Va em `Authentication`.
+3. Abra `URL Configuration`.
+4. Em `Site URL`, coloque a URL do Cloudflare:
+
+```txt
+https://resume-pilot.pages.dev
+```
+
+5. Em `Redirect URLs`, adicione:
+
+```txt
+https://resume-pilot.pages.dev/**
+http://localhost:4200/**
+```
+
+6. Salve.
+
+Se a confirmacao de e-mail estiver ativa, os usuarios podem precisar confirmar o cadastro pelo e-mail antes de entrar.
+
+## 4. Preparar os 3 usuarios de teste
+
+Opcao A: cada tester cria a propria conta pela tela `/login`.
+
+Opcao B: voce cria os usuarios no Supabase:
+
+1. `Authentication > Users`
+2. `Add user`
+3. Informe e-mail e senha temporaria
+4. Marque e-mail como confirmado, se essa opcao estiver disponivel
+5. Envie a senha temporaria para o tester
+
+Para teste real, prefira que cada usuario use os proprios dados profissionais, mas oriente a nao inserir documentos sensiveis ainda.
+
+## 5. Dados de validacao do usuario Euder
+
+Para validar com seu usuario:
+
+1. Confirme que `euder.alv@gmail.com` existe em `Authentication > Users`.
+2. Abra `SQL Editor`.
+3. Execute:
+
+```txt
+supabase/seeds/20260606103000_seed_euder_resume_data.sql
+```
+
+Esse seed popula perfil, experiencias, formacoes, skills, vaga, candidatura, CV e auditoria LinkedIn.
+
+## 6. Checklist antes de enviar aos testers
+
+- `npm run build` passou localmente.
+- `npm test -- --watch=false` passou localmente.
+- Deploy Cloudflare finalizou sem erro.
+- URL do Cloudflare abre a homepage.
+- Supabase Auth tem `Site URL` e `Redirect URLs` configuradas.
+- Cadastro real foi testado em producao.
+- Login real foi testado em producao.
+- Rotas internas funcionam ao atualizar a pagina.
+
+## 7. O que ainda nao esta no beta
+
+- Gemini real ainda nao esta conectado.
+- Upload/download de PDF/DOCX ainda nao esta ativo.
+- Importacao automatica por link de vaga nao faz parte do MVP.
+- O CV gerado ainda fica estruturado dentro do app, nao exportado em PDF.
+

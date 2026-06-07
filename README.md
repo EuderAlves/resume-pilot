@@ -13,6 +13,7 @@ Copiloto de carreira internacional para ajudar pessoas a melhorar o LinkedIn, ad
 - [Fluxos Principais](#fluxos-principais)
 - [Supabase](#supabase)
 - [Como Rodar](#como-rodar)
+- [Deploy Beta](#deploy-beta)
 - [Testes e Build](#testes-e-build)
 - [Documentacao Complementar](#documentacao-complementar)
 
@@ -502,6 +503,20 @@ Abra:
 http://localhost:4200/
 ```
 
+## Deploy Beta
+
+Guia para publicar o MVP no Cloudflare Pages:
+
+```txt
+docs/DEPLOY_CLOUDFLARE_BETA.md
+```
+
+Manual para enviar aos usuarios beta:
+
+```txt
+docs/BETA_TEST_MANUAL.md
+```
+
 ## Testes e Build
 
 Rodar build:
@@ -520,3 +535,5 @@ npm test -- --watch=false
 
 - Roadmap e regras: `docs/RESUME_PILOT_GUIDE.md`
 - Setup Supabase/Gemini: `docs/SETUP_SUPABASE_GEMINI.md`
+- Deploy beta: `docs/DEPLOY_CLOUDFLARE_BETA.md`
+- Manual de teste beta: `docs/BETA_TEST_MANUAL.md`
