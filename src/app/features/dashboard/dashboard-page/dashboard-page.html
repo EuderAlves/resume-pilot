@@ -30,11 +30,15 @@
         <svg lucideTarget aria-hidden="true"></svg>
         Vagas
       </a>
-      <a href="#" aria-disabled="true">
+      <a routerLink="/app/applications">
+        <svg lucideClipboardCheck aria-hidden="true"></svg>
+        Pipeline
+      </a>
+      <a routerLink="/app/cv">
         <svg lucideFileText aria-hidden="true"></svg>
         CVs
       </a>
-      <a href="#" aria-disabled="true">
+      <a routerLink="/app/linkedin">
         <svg lucideSparkles aria-hidden="true"></svg>
         LinkedIn
       </a>
@@ -62,8 +66,12 @@
       </div>
     </header>
 
+    @if (dashboardError()) {
+      <p class="dashboard-alert">{{ dashboardError() }}</p>
+    }
+
     <section class="metric-grid" aria-label="Metricas principais">
-      @for (metric of dashboardMetrics; track metric.label) {
+      @for (metric of dashboardMetrics(); track metric.label) {
         <article class="metric-card">
           <span>{{ metric.label }}</span>
           <strong>{{ metric.value }}</strong>
@@ -80,7 +88,7 @@
         </div>
 
         <div class="pipeline">
-          @for (column of pipelineColumns; track column.label) {
+          @for (column of pipelineColumns(); track column.label) {
             <div class="pipeline-column" [class]="column.tone">
               <span>{{ column.label }}</span>
               <strong>{{ column.count }}</strong>

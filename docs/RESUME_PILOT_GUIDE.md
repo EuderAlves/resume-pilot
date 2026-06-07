@@ -38,7 +38,7 @@ Validar uma experiencia simples, clara e vendavel com:
 - Guards de rota e restauracao de sessao. `feito`
 - Logout no dashboard. `feito`
 - Estrutura visual do app logado. `feito`
-- Dashboard inicial com cards e dados mockados. `feito`
+- Dashboard inicial com cards e dados reais/fallback. `feito`
 - Documentacao de setup. `feito`
 
 ### Fase 2 - Perfil Profissional
@@ -59,21 +59,22 @@ Validar uma experiencia simples, clara e vendavel com:
 - Extracao local inicial de requisitos e palavras-chave. `feito`
 - Score inicial de aderencia perfil x vaga. `feito parcial`
 - Sugestoes de melhoria.
-- Geracao de versoes de CV por vaga.
+- Geracao de versoes de CV por vaga. `feito parcial`
 
 ### Fase 4 - LinkedIn
 
-- Auditoria de headline, sobre, experiencias e skills.
-- Sugestoes em portugues, ingles e espanhol.
+- Auditoria de headline, sobre, experiencias e skills. `feito parcial`
+- Sugestoes em portugues. `feito parcial`
+- Sugestoes em ingles e espanhol.
 - Mensagens para recrutadores.
 - Checklist de melhorias.
 
 ### Fase 5 - Pipeline e Inteligencia
 
-- Kanban de candidaturas.
-- Historico por empresa, pais, status e salario.
-- Taxa de resposta.
-- Alertas de follow-up.
+- Kanban de candidaturas. `feito`
+- Historico por empresa, pais, status e salario. `feito parcial`
+- Taxa de resposta. `feito parcial`
+- Alertas de follow-up. `feito parcial`
 - Insights sobre paises, cargos e requisitos mais recorrentes.
 
 ### Fase 6 - Planejamento Internacional

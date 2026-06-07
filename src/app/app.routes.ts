@@ -47,6 +47,25 @@ export const routes: Routes = [
     loadComponent: () => import('./features/jobs/jobs-page/jobs-page').then((m) => m.JobsPage),
   },
   {
+    path: 'app/applications',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/applications/applications-page/applications-page').then(
+        (m) => m.ApplicationsPage,
+      ),
+  },
+  {
+    path: 'app/cv',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/cv/cv-page/cv-page').then((m) => m.CvPage),
+  },
+  {
+    path: 'app/linkedin',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/linkedin/linkedin-page/linkedin-page').then((m) => m.LinkedinPage),
+  },
+  {
     path: 'app',
     canActivate: [authGuard],
     loadComponent: () =>

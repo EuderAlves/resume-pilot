@@ -146,6 +146,18 @@ export const nextActions: readonly NextAction[] = [
     route: '/app/jobs',
   },
   {
+    label: 'Gerar uma versao de CV alinhada com uma vaga.',
+    route: '/app/cv',
+  },
+  {
+    label: 'Registrar candidaturas no pipeline para medir retorno.',
+    route: '/app/applications',
+  },
+  {
+    label: 'Auditar headline e sobre do LinkedIn.',
+    route: '/app/linkedin',
+  },
+  {
     label: 'Revisar formacoes e skills para fechar a base do perfil.',
     route: '/app/skills',
   },

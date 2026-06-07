@@ -1,6 +1,7 @@
 do $$
 declare
   target_user_id uuid;
+  reference_job_id uuid;
 begin
   select id
   into target_user_id
@@ -254,6 +255,101 @@ begin
       "fitScore":75,
       "matchedSkills":["Angular","TypeScript","JavaScript","Testes unitarios","Metodologias ageis","Node.js","Azure","GCP","Jenkins","Figma"],
       "missingSkills":["REST APIs","Git"]
+    }'::jsonb
+  )
+  returning id into reference_job_id;
+
+  delete from public.applications
+  where user_id = target_user_id
+    and job_id = reference_job_id;
+
+  insert into public.applications (
+    user_id,
+    job_id,
+    applied_at,
+    status,
+    follow_up_at,
+    notes,
+    contact_name,
+    contact_url
+  )
+  values (
+    target_user_id,
+    reference_job_id,
+    current_date,
+    'cv_tailored',
+    current_date + interval '7 days',
+    'Candidatura de validacao do MVP criada a partir do seed.',
+    'Recruiter Europa',
+    'https://www.linkedin.com'
+  );
+
+  delete from public.cv_versions
+  where user_id = target_user_id
+    and job_id = reference_job_id
+    and title = 'CV | Frontend Angular Developer | Empresa de tecnologia europeia';
+
+  insert into public.cv_versions (
+    user_id,
+    job_id,
+    title,
+    language,
+    content,
+    ats_score
+  )
+  values (
+    target_user_id,
+    reference_job_id,
+    'CV | Frontend Angular Developer | Empresa de tecnologia europeia',
+    'pt-BR',
+    '{
+      "headline":"Frontend Angular Developer | TypeScript | JavaScript | APIs | Agile | Alvo: Frontend Angular Developer",
+      "summary":"Desenvolvedor Frontend com experiencia em Angular, TypeScript, JavaScript, testes unitarios, refinamento tecnico, metodologias ageis e colaboracao com times de produto. Interesse direcionado para Frontend Angular Developer. Principais aderencias para a vaga: Angular, TypeScript, JavaScript, Testes unitarios, Metodologias ageis, Node.js, Azure, GCP.",
+      "targetJob":"Frontend Angular Developer | Empresa de tecnologia europeia",
+      "matchedSkills":["Angular","TypeScript","JavaScript","Testes unitarios","Metodologias ageis","Node.js","Azure","GCP","Jenkins","Figma"],
+      "missingSkills":["REST APIs","Git"],
+      "experienceBullets":[
+        "Desenvolvo diariamente em Angular utilizando VSCode e principios SOLID para entregar codigo limpo, escalavel e de facil manutencao.",
+        "Realizo testes unitarios para mitigar erros de regras de negocio, aumentando a seguranca das entregas.",
+        "Analiso handoffs no Figma e historias no Jira para alinhar implementacao com requisitos de produto.",
+        "Avalio Pull Requests em Azure e GCP para identificar melhorias e prevenir falhas antes da entrega."
+      ],
+      "education":["Pos-Graduacao em Desenvolvimento Web Full Stack | PUC Minas","Tecnologo em Automacao Industrial | CEUNSP"],
+      "languages":["Portugues - nativo","Espanhol - avancado","Ingles - intermediario"],
+      "keywords":["Angular","TypeScript","JavaScript","REST APIs","Git","Testes unitarios","Metodologias ageis","Node.js","Azure","GCP","Jenkins","Figma","Ingles","mid-level"]
+    }'::jsonb,
+    76
+  );
+
+  delete from public.linkedin_audits
+  where user_id = target_user_id
+    and profile_url = 'seed:euder-linkedin';
+
+  insert into public.linkedin_audits (
+    user_id,
+    profile_url,
+    headline_score,
+    about_score,
+    experience_score,
+    skills_score,
+    total_score,
+    suggestions
+  )
+  values (
+    target_user_id,
+    'seed:euder-linkedin',
+    90,
+    75,
+    90,
+    90,
+    85,
+    '{
+      "strengths":["Headline ja esta direcionada.","Experiencias suficientes para sustentar o perfil.","Inventario de skills esta forte."],
+      "improvements":[
+        {"area":"Sobre","title":"Mostre impacto e foco","description":"Inclua resultados, tipo de produto, stack e paises/cargos que voce busca."}
+      ],
+      "rewrittenHeadline":"Frontend Angular Developer | Angular | TypeScript | JavaScript | Europa: Portugal/Espanha",
+      "rewrittenAbout":"Sou Frontend Angular Developer com foco em entregas web, qualidade de codigo e colaboracao com times de produto. Minha stack principal inclui Angular, TypeScript, JavaScript, Node.js, Java Spring Boot, ASP.NET, Testes unitarios e SOLID. Busco oportunidades internacionais com foco em Portugal, Espanha, Alemanha, Hungria e Franca. Meu objetivo e transformar experiencia real em entregas claras, mensuraveis e relevantes para o negocio."
     }'::jsonb
   );
 end $$;

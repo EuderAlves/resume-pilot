@@ -1,0 +1,144 @@
+<main class="applications-page">
+  <header class="topbar">
+    <a class="back-link" routerLink="/app">
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Dashboard
+    </a>
+
+    <button class="new-button" type="button" (click)="startNewApplication()">
+      <svg lucidePlus aria-hidden="true"></svg>
+      Nova candidatura
+    </button>
+  </header>
+
+  <section class="page-heading">
+    <p class="eyebrow">Pipeline</p>
+    <h1>Candidaturas</h1>
+    <p>Acompanhe status, follow-up, contatos e observacoes por vaga.</p>
+  </section>
+
+  <section class="content-grid">
+    <aside class="pipeline-board" aria-label="Pipeline de candidaturas">
+      <div class="panel-title">
+        <svg lucideClipboardCheck aria-hidden="true"></svg>
+        <h2>Status</h2>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Carregando candidaturas...</p>
+      } @else if (applications().length === 0) {
+        <p class="empty-state">Nenhuma candidatura registrada ainda.</p>
+      } @else {
+        <div class="columns">
+          @for (column of pipelineColumns(); track column.value) {
+            @if (column.applications.length > 0) {
+              <section class="pipeline-column" [class]="column.tone">
+                <header>
+                  <span>{{ column.label }}</span>
+                  <strong>{{ column.applications.length }}</strong>
+                </header>
+
+                @for (application of column.applications; track application.id) {
+                  <article class="application-card" [class.active]="application.id === selectedApplicationId()">
+                    <h3>{{ jobTitle(application.jobId) }}</h3>
+                    @if (application.followUpAt) {
+                      <p>Follow-up: {{ application.followUpAt }}</p>
+                    }
+                    @if (application.notes) {
+                      <p>{{ application.notes }}</p>
+                    }
+                    <div class="card-actions">
+                      <button type="button" (click)="editApplication(application)">
+                        <svg lucidePenLine aria-hidden="true"></svg>
+                        Editar
+                      </button>
+                      <button type="button" class="danger" (click)="deleteApplication(application)">
+                        <svg lucideTrash2 aria-hidden="true"></svg>
+                        Remover
+                      </button>
+                    </div>
+                  </article>
+                }
+              </section>
+            }
+          }
+        </div>
+      }
+    </aside>
+
+    <form class="application-form" [formGroup]="form" (ngSubmit)="saveApplication()">
+      <div class="panel-title">
+        <svg lucideSave aria-hidden="true"></svg>
+        <h2>{{ isEditing() ? 'Editar candidatura' : 'Nova candidatura' }}</h2>
+      </div>
+
+      <div class="field-grid">
+        <label class="span-2">
+          <span>Vaga</span>
+          <select formControlName="jobId">
+            <option value="">Selecione uma vaga</option>
+            @for (job of jobs(); track job.id) {
+              <option [value]="job.id">{{ job.title }}{{ job.company ? ' | ' + job.company : '' }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          <span>Status</span>
+          <select formControlName="status">
+            @for (option of statusOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          <span>Data da aplicacao</span>
+          <input type="date" formControlName="appliedAt" />
+        </label>
+
+        <label>
+          <span>Follow-up</span>
+          <input type="date" formControlName="followUpAt" />
+        </label>
+
+        <label>
+          <span>Contato</span>
+          <input type="text" formControlName="contactName" placeholder="Nome do recrutador" />
+        </label>
+
+        <label class="span-2">
+          <span>Link do contato</span>
+          <input type="url" formControlName="contactUrl" placeholder="LinkedIn ou e-mail de referencia" />
+        </label>
+
+        <label class="span-2">
+          <span>Notas</span>
+          <textarea rows="6" formControlName="notes" placeholder="Contexto, retorno, proximos passos"></textarea>
+        </label>
+      </div>
+
+      @if (form.invalid && form.touched) {
+        <p class="form-alert">Selecione uma vaga e um status.</p>
+      }
+
+      @if (error()) {
+        <p class="form-alert">{{ error() }}</p>
+      }
+
+      @if (feedback()) {
+        <p class="form-success">
+          <svg lucideCheck aria-hidden="true"></svg>
+          {{ feedback() }}
+        </p>
+      }
+
+      <div class="form-actions">
+        <button class="secondary-button" type="button" (click)="startNewApplication()">Limpar</button>
+        <button class="primary-button" type="submit" [disabled]="isSaving()">
+          {{ isSaving() ? 'Salvando...' : 'Salvar candidatura' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</main>

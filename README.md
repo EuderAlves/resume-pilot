@@ -52,7 +52,7 @@ O produto deve responder tres perguntas principais:
 - Guards de rota criados para proteger a area logada.
 - Sessao do Supabase restaurada ao atualizar a pagina.
 - Logout criado no dashboard.
-- Dashboard inicial criado com dados mockados.
+- Dashboard inicial criado com metricas reais quando ha dados no Supabase.
 - Tela de onboarding do perfil profissional criada.
 - Perfil profissional salvo na tabela `professional_profiles`.
 - Serviço de perfil criado com mappers testados.
@@ -62,6 +62,9 @@ O produto deve responder tres perguntas principais:
 - CRUD inicial de skills criado.
 - CRUD inicial de vagas criado com descricao colada pelo usuario.
 - Analise local inicial criada para extrair requisitos, idiomas, senioridade, modelo e score.
+- Pipeline real de candidaturas criado.
+- Gerador local de versoes de CV por vaga criado.
+- Auditoria local de LinkedIn criada.
 - Edge Function placeholder criada para analise de carreira/vaga.
 - Asset visual da homepage criado e salvo em `public/images`.
 - Testes unitarios iniciais criados.
@@ -72,16 +75,13 @@ O produto deve responder tres perguntas principais:
 
 - Confirmar configuracao final do Supabase Auth para e-mail/senha.
 - Evoluir score de aderencia perfil x vaga com IA.
-- Criar gerador de versoes de CV por vaga.
-- Criar auditoria de LinkedIn.
 - Conectar Gemini na Edge Function.
 - Criar storage para documentos e CVs.
-- Criar pipeline real de candidaturas.
 - Criar deploy na Cloudflare Pages.
 
 ## Estado Atual
 
-O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard inicial, onboarding do perfil profissional, CRUD inicial de experiencias, formacoes, skills, vagas por descricao colada e base de banco preparada.
+O MVP tem uma homepage comercial, fluxo de login/cadastro real com Supabase, dashboard com metricas reais, onboarding do perfil profissional, CRUD inicial de experiencias, formacoes, skills, vagas por descricao colada, pipeline de candidaturas, gerador de CV e auditoria de LinkedIn.
 
 O login usa Supabase quando `url` e `anonKey` estao preenchidos nos environments. Caso a configuracao esteja vazia, o `AuthService` entra em modo mock para desenvolvimento local.
 
@@ -101,6 +101,9 @@ Angular App
       -> Education
       -> Skills
       -> Jobs
+      -> Applications
+      -> CV
+      -> LinkedIn
   -> Core
     -> Auth Service
     -> Supabase Service
@@ -147,6 +150,12 @@ Angular App
 | `src/app/features/skills/data` | Modelos, mappers e servico de persistencia de skills. |
 | `src/app/features/jobs/jobs-page` | CRUD inicial de vagas com descricao colada pelo usuario. |
 | `src/app/features/jobs/data` | Modelos, mappers, analisador local e servico de persistencia de vagas. |
+| `src/app/features/applications/applications-page` | Pipeline real de candidaturas. |
+| `src/app/features/applications/data` | Modelos, mappers e servico de persistencia de candidaturas. |
+| `src/app/features/cv/cv-page` | Geracao e historico de CVs por vaga. |
+| `src/app/features/cv/data` | Gerador local, mappers e servico de persistencia de CVs. |
+| `src/app/features/linkedin/linkedin-page` | Auditoria de LinkedIn com score e sugestoes. |
+| `src/app/features/linkedin/data` | Analisador local, mappers e servico de auditoria LinkedIn. |
 | `src/environments/environment.ts` | Configuracao local/desenvolvimento. |
 | `src/environments/environment.prod.ts` | Configuracao de producao. |
 | `public/images/career-copilot-hero.png` | Imagem principal da homepage/login. |
@@ -169,6 +178,9 @@ Angular App
 /app/education -> EducationPage com authGuard
 /app/skills -> SkillsPage com authGuard
 /app/jobs -> JobsPage com authGuard
+/app/applications -> ApplicationsPage com authGuard
+/app/cv -> CvPage com authGuard
+/app/linkedin -> LinkedinPage com authGuard
 ```
 
 Arquivo responsavel:
@@ -224,9 +236,11 @@ src/app/core/supabase/supabase.service.ts
 
 ```txt
 DashboardPage
+  -> DashboardDataService
+    -> jobs, applications, cv_versions, linkedin_audits
+    -> metricas reais
   -> product-content.ts
-    -> metricas mockadas
-    -> pipeline mockado
+    -> fallback e proximas acoes
     -> proximas acoes
 ```
 
@@ -235,6 +249,7 @@ Arquivos responsaveis:
 ```txt
 src/app/features/dashboard/dashboard-page
 src/app/core/data/product-content.ts
+src/app/features/dashboard/data/dashboard-data.service.ts
 ```
 
 ### Perfil Profissional
@@ -334,6 +349,61 @@ src/app/features/jobs/data/job-description-analyzer.ts
 src/app/features/jobs/data/job-form.mapper.ts
 ```
 
+### Pipeline
+
+```txt
+ApplicationsPage
+  -> ApplicationService
+    -> SupabaseService
+      -> applications
+```
+
+Arquivos responsaveis:
+
+```txt
+src/app/features/applications/applications-page
+src/app/features/applications/data/application.service.ts
+src/app/features/applications/data/application-form.mapper.ts
+```
+
+### CV por Vaga
+
+```txt
+CvPage
+  -> cv-generator.ts
+    -> usa perfil, experiencias, formacoes, skills e vaga
+  -> CvVersionService
+    -> SupabaseService
+      -> cv_versions
+```
+
+Arquivos responsaveis:
+
+```txt
+src/app/features/cv/cv-page
+src/app/features/cv/data/cv-generator.ts
+src/app/features/cv/data/cv-version.service.ts
+```
+
+### LinkedIn
+
+```txt
+LinkedinPage
+  -> linkedin-audit-analyzer.ts
+    -> calcula score e sugestoes locais
+  -> LinkedinAuditService
+    -> SupabaseService
+      -> linkedin_audits
+```
+
+Arquivos responsaveis:
+
+```txt
+src/app/features/linkedin/linkedin-page
+src/app/features/linkedin/data/linkedin-audit-analyzer.ts
+src/app/features/linkedin/data/linkedin-audit.service.ts
+```
+
 ### Analise com IA
 
 Fluxo planejado:
@@ -389,6 +459,9 @@ Esse seed procura o usuario `euder.alv@gmail.com` em `auth.users` e popula:
 - skills;
 - experiencias em CI&T, NTT-Data e EPTV.
 - uma vaga de referencia para testar a tela de vagas.
+- uma candidatura vinculada a vaga de referencia.
+- uma versao de CV gerada para a vaga de referencia.
+- uma auditoria de LinkedIn de exemplo.
 
 Para aplicar:
 

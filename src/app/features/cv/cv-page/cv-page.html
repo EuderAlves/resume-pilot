@@ -1,0 +1,119 @@
+<main class="cv-page">
+  <header class="topbar">
+    <a class="back-link" routerLink="/app">
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Dashboard
+    </a>
+  </header>
+
+  <section class="page-heading">
+    <p class="eyebrow">CV por vaga</p>
+    <h1>Versoes de CV</h1>
+    <p>Gere uma versao alinhada com a vaga usando apenas dados salvos no seu perfil.</p>
+  </section>
+
+  <section class="content-grid">
+    <aside class="version-list" aria-label="Versoes de CV">
+      <div class="panel-title">
+        <svg lucideFileText aria-hidden="true"></svg>
+        <h2>Historico</h2>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Carregando versoes...</p>
+      } @else if (versions().length === 0) {
+        <p class="empty-state">Nenhuma versao gerada ainda.</p>
+      } @else {
+        <div class="cards">
+          @for (version of versions(); track version.id) {
+            <button class="version-card" type="button" (click)="selectVersion(version)">
+              <span>{{ version.title }}</span>
+              <strong>{{ version.atsScore }}%</strong>
+            </button>
+          }
+        </div>
+      }
+    </aside>
+
+    <section class="cv-workspace">
+      <form class="cv-form" [formGroup]="form" (ngSubmit)="generateCv()">
+        <div class="panel-title">
+          <svg lucideSparkles aria-hidden="true"></svg>
+          <h2>Gerar nova versao</h2>
+        </div>
+
+        <div class="field-grid">
+          <label>
+            <span>Vaga</span>
+            <select formControlName="jobId">
+              <option value="">Selecione uma vaga</option>
+              @for (job of jobs(); track job.id) {
+                <option [value]="job.id">{{ job.title }}{{ job.company ? ' | ' + job.company : '' }}</option>
+              }
+            </select>
+          </label>
+
+          <label>
+            <span>Idioma</span>
+            <select formControlName="language">
+              <option value="pt-BR">Portugues</option>
+              <option value="en">Ingles</option>
+              <option value="es">Espanhol</option>
+            </select>
+          </label>
+        </div>
+
+        @if (form.invalid && form.touched) {
+          <p class="form-alert">Selecione uma vaga para gerar o CV.</p>
+        }
+
+        @if (error()) {
+          <p class="form-alert">{{ error() }}</p>
+        }
+
+        @if (feedback()) {
+          <p class="form-success">{{ feedback() }}</p>
+        }
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit" [disabled]="isSaving()">
+            <svg lucideSave aria-hidden="true"></svg>
+            {{ isSaving() ? 'Gerando...' : 'Gerar e salvar CV' }}
+          </button>
+        </div>
+      </form>
+
+      @if (preview(); as cv) {
+        <article class="cv-preview">
+          <h2>{{ cv.headline }}</h2>
+          <p>{{ cv.summary }}</p>
+
+          <section>
+            <h3>Skills alinhadas</h3>
+            <p>{{ cv.matchedSkills.join(', ') || 'Nenhuma skill alinhada detectada.' }}</p>
+          </section>
+
+          <section>
+            <h3>Experiencias priorizadas</h3>
+            <ul>
+              @for (bullet of cv.experienceBullets; track bullet) {
+                <li>{{ bullet }}</li>
+              }
+            </ul>
+          </section>
+
+          <section>
+            <h3>Formacao e idiomas</h3>
+            <p>{{ cv.education.join(', ') || 'Formacao nao informada.' }}</p>
+            <p>{{ cv.languages.join(', ') || 'Idiomas nao informados.' }}</p>
+          </section>
+
+          <section>
+            <h3>Lacunas para evoluir</h3>
+            <p>{{ cv.missingSkills.join(', ') || 'Nenhuma lacuna detectada.' }}</p>
+          </section>
+        </article>
+      }
+    </section>
+  </section>
+</main>

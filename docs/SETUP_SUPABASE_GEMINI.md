@@ -151,4 +151,4 @@ Para popular dados reais de validacao do usuario `euder.alv@gmail.com`:
 4. Cole o conteudo de `supabase/seeds/20260606103000_seed_euder_resume_data.sql`.
 5. Clique em `Run`.
 
-O seed atualiza o perfil e insere dados de formacao, skills e experiencias extraidos da planilha inicial.
+O seed atualiza o perfil e insere dados de formacao, skills, experiencias, vaga de referencia, candidatura, versao de CV e auditoria LinkedIn extraidos ou derivados da planilha inicial.

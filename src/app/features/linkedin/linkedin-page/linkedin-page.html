@@ -1,0 +1,125 @@
+<main class="linkedin-page">
+  <header class="topbar">
+    <a class="back-link" routerLink="/app">
+      <svg lucideArrowLeft aria-hidden="true"></svg>
+      Dashboard
+    </a>
+  </header>
+
+  <section class="page-heading">
+    <p class="eyebrow">LinkedIn</p>
+    <h1>Auditoria do perfil</h1>
+    <p>Avalie headline, sobre, experiencias e skills com foco em recrutadores internacionais.</p>
+  </section>
+
+  <section class="content-grid">
+    <aside class="audit-history" aria-label="Historico de auditorias">
+      <div class="panel-title">
+        <svg lucideSparkles aria-hidden="true"></svg>
+        <h2>Historico</h2>
+      </div>
+
+      @if (isLoading()) {
+        <p class="empty-state">Carregando auditorias...</p>
+      } @else if (audits().length === 0) {
+        <p class="empty-state">Nenhuma auditoria salva ainda.</p>
+      } @else {
+        <div class="cards">
+          @for (audit of audits(); track audit.id) {
+            <button class="audit-card" type="button" (click)="selectAudit(audit)">
+              <span>{{ audit.profileUrl || 'Perfil sem URL' }}</span>
+              <strong>{{ audit.totalScore }}/100</strong>
+            </button>
+          }
+        </div>
+      }
+    </aside>
+
+    <section class="audit-workspace">
+      <form class="audit-form" [formGroup]="form" (ngSubmit)="auditLinkedin()">
+        <div class="field-grid">
+          <label class="span-2">
+            <span>URL do LinkedIn</span>
+            <input type="url" formControlName="profileUrl" placeholder="Opcional" />
+          </label>
+
+          <label class="span-2">
+            <span>Headline atual</span>
+            <input type="text" formControlName="headline" placeholder="Cargo | Stack | Foco" />
+          </label>
+
+          <label class="span-2">
+            <span>Sobre atual</span>
+            <textarea rows="8" formControlName="about" placeholder="Cole ou ajuste o texto do Sobre"></textarea>
+          </label>
+        </div>
+
+        @if (form.invalid && form.touched) {
+          <p class="form-alert">Preencha headline e sobre com conteudo suficiente.</p>
+        }
+
+        @if (error()) {
+          <p class="form-alert">{{ error() }}</p>
+        }
+
+        @if (feedback()) {
+          <p class="form-success">{{ feedback() }}</p>
+        }
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit" [disabled]="isSaving()">
+            <svg lucideSave aria-hidden="true"></svg>
+            {{ isSaving() ? 'Auditando...' : 'Auditar e salvar' }}
+          </button>
+        </div>
+      </form>
+
+      @if (currentAudit(); as audit) {
+        <article class="audit-result">
+          <div class="total-score">
+            <span>Score</span>
+            <strong>{{ audit.totalScore }}</strong>
+          </div>
+
+          <div class="score-grid">
+            <div>
+              <span>Headline</span>
+              <strong>{{ audit.headlineScore }}/100</strong>
+            </div>
+            <div>
+              <span>Sobre</span>
+              <strong>{{ audit.aboutScore }}/100</strong>
+            </div>
+            <div>
+              <span>Experiencias</span>
+              <strong>{{ audit.experienceScore }}/100</strong>
+            </div>
+            <div>
+              <span>Skills</span>
+              <strong>{{ audit.skillsScore }}/100</strong>
+            </div>
+          </div>
+
+          <section>
+            <h3>Headline sugerida</h3>
+            <p>{{ audit.suggestions.rewrittenHeadline }}</p>
+          </section>
+
+          <section>
+            <h3>Sobre sugerido</h3>
+            <p>{{ audit.suggestions.rewrittenAbout }}</p>
+          </section>
+
+          <section>
+            <h3>Proximas melhorias</h3>
+            <ul>
+              @for (item of audit.suggestions.improvements; track item.title) {
+                <li><strong>{{ item.area }}:</strong> {{ item.description }}</li>
+              }
+            </ul>
+          </section>
+        </article>
+      }
+    </section>
+  </section>
+</main>
