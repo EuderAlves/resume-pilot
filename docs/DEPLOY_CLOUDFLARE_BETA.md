@@ -101,7 +101,7 @@ Abra essa URL e valide:
 - atualizar a pagina em `/login` nao gera 404;
 - depois do login, atualizar `/app`, `/app/jobs` e `/app/cv` nao gera 404.
 
-O arquivo `public/_redirects` ja foi criado para Cloudflare Pages. Para Workers Static Assets, o fallback de SPA esta em `wrangler.jsonc`.
+Para Workers Static Assets, o fallback de SPA esta em `wrangler.jsonc`.
 
 ## 3. Configurar Supabase Auth para producao
 
@@ -238,15 +238,21 @@ Invalid _redirects configuration:
 Line 1: Infinite loop detected in this rule.
 ```
 
-O motivo e que o arquivo `public/_redirects` foi criado para Cloudflare Pages, mas Workers Static Assets ja usa o fallback de SPA configurado no `wrangler.jsonc`.
+O motivo e que o arquivo `public/_redirects` e interpretado como uma configuracao especial pelo Workers Static Assets. Esse arquivo era comum no Cloudflare Pages, mas no Workers ele conflita com o fallback de SPA.
 
-Para resolver, o projeto tem `public/.assetsignore` com:
+Para resolver, o projeto nao deve ter `public/_redirects` enquanto estiver usando Workers Static Assets.
 
 ```txt
-_redirects
+public/_redirects removido
 ```
 
-Assim o Wrangler ignora `_redirects` no deploy Workers, mas o arquivo continua disponivel caso o projeto seja publicado como Cloudflare Pages.
+O fallback correto fica em `wrangler.jsonc`:
+
+```txt
+assets.not_found_handling = single-page-application
+```
+
+Se no futuro voce criar um projeto Cloudflare Pages separado, ai sim pode recriar `_redirects` apenas para o deploy Pages.
 
 ## 7. O que ainda nao esta no beta
 
