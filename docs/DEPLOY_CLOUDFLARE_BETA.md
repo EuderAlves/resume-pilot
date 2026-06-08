@@ -1,6 +1,6 @@
 # Deploy Beta - resumePilot
 
-Este guia sobe o MVP do resumePilot para uma URL publica gratuita usando Cloudflare Pages conectado ao GitHub.
+Este guia sobe o MVP do resumePilot para uma URL publica gratuita usando Cloudflare conectado ao GitHub.
 
 ## Objetivo
 
@@ -25,24 +25,33 @@ npm run build
 npm test -- --watch=false
 ```
 
-## 1. Criar o projeto no Cloudflare Pages
+## 1. Criar o projeto no Cloudflare
+
+Existem dois caminhos validos no Cloudflare:
+
+- `Pages`, que gera uma URL parecida com `https://resume-pilot.pages.dev`.
+- `Workers Static Assets`, que gera uma URL parecida com `https://resume-pilot.euder-alv.workers.dev`.
+
+Se a URL gerada terminou com `.workers.dev`, use a configuracao de Workers abaixo. Este e o caminho que esta ativo agora no beta.
+
+### Opcao A: Workers Static Assets
 
 1. Acesse `https://dash.cloudflare.com`.
 2. Entre na conta.
 3. Va em `Workers & Pages`.
 4. Clique em `Create application`.
-5. Selecione `Pages`.
+5. Selecione o fluxo de `Workers` conectado ao GitHub.
 6. Clique em `Connect to Git`.
 7. Conecte sua conta GitHub.
 8. Escolha o repositorio `resume-pilot`.
 9. Configure:
 
 ```txt
-Project name: resume-pilot
+Worker name: resume-pilot
 Production branch: main
 Framework preset: Angular ou None
 Build command: npm run build
-Build output directory: dist/resume-pilot/browser
+Deploy command: npx wrangler deploy
 Root directory: /
 ```
 
@@ -54,12 +63,35 @@ NODE_VERSION=22.16.0
 
 11. Clique em `Save and Deploy`.
 
+O arquivo `wrangler.jsonc` do projeto ja aponta o Cloudflare para a pasta correta:
+
+```txt
+./dist/resume-pilot/browser
+```
+
+Tambem esta configurado como SPA, entao rotas como `/login`, `/app/jobs` e `/app/cv` devem abrir mesmo ao atualizar a pagina.
+
+### Opcao B: Cloudflare Pages
+
+Se voce preferir criar um projeto Pages, use:
+
+```txt
+Project name: resume-pilot
+Production branch: main
+Framework preset: Angular ou None
+Build command: npm run build
+Build output directory: dist/resume-pilot/browser
+Root directory: /
+NODE_VERSION=22.16.0
+```
+
 ## 2. Confirmar URL publicada
 
 Ao final do deploy, o Cloudflare deve gerar uma URL parecida com:
 
 ```txt
 https://resume-pilot.pages.dev
+https://resume-pilot.euder-alv.workers.dev
 ```
 
 Abra essa URL e valide:
@@ -69,7 +101,7 @@ Abra essa URL e valide:
 - atualizar a pagina em `/login` nao gera 404;
 - depois do login, atualizar `/app`, `/app/jobs` e `/app/cv` nao gera 404.
 
-O arquivo `public/_redirects` ja foi criado para permitir rotas internas do Angular em hospedagem estatica.
+O arquivo `public/_redirects` ja foi criado para Cloudflare Pages. Para Workers Static Assets, o fallback de SPA esta em `wrangler.jsonc`.
 
 ## 3. Configurar Supabase Auth para producao
 
@@ -82,12 +114,14 @@ No Supabase:
 
 ```txt
 https://resume-pilot.pages.dev
+https://resume-pilot.euder-alv.workers.dev
 ```
 
 5. Em `Redirect URLs`, adicione:
 
 ```txt
 https://resume-pilot.pages.dev/**
+https://resume-pilot.euder-alv.workers.dev/**
 http://localhost:4200/**
 ```
 
@@ -164,6 +198,36 @@ NODE_VERSION=22.16.0
 7. Rode `Retry deployment`.
 
 O projeto tambem tem `.node-version` com `22.16.0`, entao novos deploys devem usar Node 22 mesmo se a variavel nao estiver configurada.
+
+## Correcao: deploy com sucesso, mas URL abre 404
+
+Se o deploy finalizar com sucesso, mas a URL `workers.dev` abrir 404, o Cloudflare provavelmente publicou um Worker sem saber qual pasta deve servir como assets estaticos.
+
+Confirme no Cloudflare:
+
+1. Abra `Workers & Pages`.
+2. Abra o projeto `resume-pilot`.
+3. Va em `Settings`.
+4. Abra `Build`.
+5. Confira:
+
+```txt
+Build command: npm run build
+Deploy command: npx wrangler deploy
+Root directory: /
+```
+
+6. Salve.
+7. Faca novo deploy do commit mais recente.
+
+No repositorio, o arquivo `wrangler.jsonc` deve existir com:
+
+```txt
+assets.directory = ./dist/resume-pilot/browser
+assets.not_found_handling = single-page-application
+```
+
+Isso e necessario porque o Angular gera o `index.html` dentro de `dist/resume-pilot/browser`, nao diretamente em `dist/resume-pilot`.
 
 ## 7. O que ainda nao esta no beta
 

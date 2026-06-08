@@ -34,7 +34,7 @@ O produto deve responder tres perguntas principais:
 - Estado: Angular Signals e servicos por feature.
 - Backend MVP: Supabase Auth, Postgres, Storage e Edge Functions.
 - IA: Gemini API via Edge Function.
-- Hospedagem planejada: Cloudflare Pages.
+- Hospedagem planejada: Cloudflare Workers Static Assets ou Cloudflare Pages.
 - Banco: Supabase Postgres com RLS.
 
 ## Roadmap
@@ -511,10 +511,17 @@ Guia para publicar o MVP no Cloudflare Pages:
 docs/DEPLOY_CLOUDFLARE_BETA.md
 ```
 
-Para Cloudflare Pages, use Node:
+Para Cloudflare, use Node:
 
 ```txt
 NODE_VERSION=22.16.0
+```
+
+O projeto tem `wrangler.jsonc` para deploy em Workers Static Assets:
+
+```txt
+assets.directory: ./dist/resume-pilot/browser
+assets.not_found_handling: single-page-application
 ```
 
 Manual para enviar aos usuarios beta:
