@@ -51,7 +51,7 @@ Worker name: resume-pilot
 Production branch: main
 Framework preset: Angular ou None
 Build command: npm run build
-Deploy command: npx wrangler deploy
+Deploy command: npm run cloudflare:deploy
 Root directory: /
 ```
 
@@ -213,7 +213,7 @@ Confirme no Cloudflare:
 
 ```txt
 Build command: npm run build
-Deploy command: npx wrangler deploy
+Deploy command: npm run cloudflare:deploy
 Root directory: /
 ```
 

@@ -524,6 +524,13 @@ assets.directory: ./dist/resume-pilot/browser
 assets.not_found_handling: single-page-application
 ```
 
+No Cloudflare Workers Builds, use:
+
+```txt
+Build command: npm run build
+Deploy command: npm run cloudflare:deploy
+```
+
 Manual para enviar aos usuarios beta:
 
 ```txt

@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "deploy:cloudflare": "npm run build && npx wrangler deploy",
+    "cloudflare:deploy": "npx wrangler@4.98.0 deploy --config wrangler.jsonc",
+    "deploy:cloudflare": "npm run build && npm run cloudflare:deploy",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
