@@ -229,6 +229,25 @@ assets.not_found_handling = single-page-application
 
 Isso e necessario porque o Angular gera o `index.html` dentro de `dist/resume-pilot/browser`, nao diretamente em `dist/resume-pilot`.
 
+## Correcao: erro `Invalid _redirects configuration`
+
+Se o deploy em Workers falhar com:
+
+```txt
+Invalid _redirects configuration:
+Line 1: Infinite loop detected in this rule.
+```
+
+O motivo e que o arquivo `public/_redirects` foi criado para Cloudflare Pages, mas Workers Static Assets ja usa o fallback de SPA configurado no `wrangler.jsonc`.
+
+Para resolver, o projeto tem `public/.assetsignore` com:
+
+```txt
+_redirects
+```
+
+Assim o Wrangler ignora `_redirects` no deploy Workers, mas o arquivo continua disponivel caso o projeto seja publicado como Cloudflare Pages.
+
 ## 7. O que ainda nao esta no beta
 
 - Gemini real ainda nao esta conectado.
